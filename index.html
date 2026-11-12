@@ -213,7 +213,7 @@ tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .invgrid div{display:grid;gap:1px}
 .invgrid .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .totals{display:grid;justify-content:end;gap:4px;font-variant-numeric:tabular-nums}
-.totals div{display:grid;grid-template-columns:120px 120px;text-align:right;gap:12px}
+.totals div{display:grid;grid-template-columns:auto 130px;text-align:right;gap:16px}
 .totals .grand{font-weight:700;font-size:17px;border-top:1px solid var(--line);padding-top:6px}
 
 /* Invoicing action bar */
@@ -241,7 +241,7 @@ textarea.csv{width:100%;min-height:160px;font-family:var(--font-mono);font-size:
   .timeline li{grid-template-columns:84px 1fr}
   .feed li{grid-template-columns:56px 1fr auto}
   .mbox{padding:16px}
-  .totals div{grid-template-columns:100px 110px}
+  .totals div{grid-template-columns:auto 110px;gap:10px}
 }
 @media (prefers-reduced-motion: no-preference){
   .drawer{animation:slide .18s ease-out}
@@ -283,7 +283,10 @@ textarea.csv{width:100%;min-height:160px;font-family:var(--font-mono);font-size:
 /* ---------------- Settings for the example ---------------- */
 var CLIENT = 'Example Charity';
 var AGENCY = 'Clever';
-var FEE = 150;            // placeholder fee per qualifying sign-up, ex GST
+var FEE_MULT = 7;         // fee per qualifying sign-up = 7 x its monthly amount, ex GST
+function fee(r){ return r.amount*FEE_MULT; }
+function feeTotal(lines){ return lines.reduce(function(a,r){ return a+fee(r); },0); }
+function gstOf(v){ return Math.round(v*GST*100)/100; }
 var GST = 0.10;
 var LS_KEY = 'champion-wireframe-v1';
 
@@ -491,7 +494,7 @@ function expectedQualify(r){
 }
 function invoiceInfo(inv){
   var lines = inv.ids.map(function(id){ return byEg[id]; });
-  var sub = lines.length*FEE, gst = Math.round(sub*GST*100)/100;
+  var sub = feeTotal(lines), gst = gstOf(sub);
   return {lines:lines, sub:sub, gst:gst, total:sub+gst, status: inv.date+14<=TODAY ? 'Paid' : 'Awaiting payment'};
 }
 function rate(amount){ return amount>=40 ? 30 : amount>=20 ? 20 : 10; }
@@ -755,7 +758,7 @@ function viewInvoicing(){
   '<div class="tiles">'+
     '<div class="tile accent"><span class="k">This run</span><span class="v">'+fmtShort(TODAY)+'</span><span class="s">'+fmtDay(TODAY)+'</span></div>'+
     '<div class="tile"><span class="k">Ready to invoice</span><span class="v">'+ready.length+'</span><span class="s">2 successful debits, not invoiced</span></div>'+
-    '<div class="tile"><span class="k">Fee per sign-up</span><span class="v">'+money0(FEE)+'</span><span class="s">Placeholder, ex GST</span></div>'+
+    '<div class="tile"><span class="k">Fee per sign-up</span><span class="v">7 ×</span><span class="s">the monthly amount, ex GST ($30/mo → $210)</span></div>'+
     '<div class="tile"><span class="k">Next debit run</span><span class="v">'+fmtShort(NEXT_RUN)+'</span><span class="s">'+plural(oneDebit,'sign-up')+' could qualify</span></div>'+
   '</div>';
   if(ready.length){
@@ -770,11 +773,11 @@ function viewInvoicing(){
         '<td data-l="Method">'+r.method+'</td>'+
         '<td class="num r" data-l="Amount">'+money(r.amount)+'</td>'+
         '<td class="num" data-l="2nd debit cleared">'+fmt(r.qualify)+'</td>'+
-        '<td class="num r" data-l="Fee">'+money(FEE)+'</td></tr>';
+        '<td class="num r" data-l="Fee (7 × monthly)">'+money(fee(r))+'</td></tr>';
     }).join('');
     var allOn = ready.every(function(r){ return state.sel[r.eg]; });
     html += '<div class="section"><div class="section-head"><h2>Ready to invoice</h2><span class="hint">Every row has 2 successful debits. Untick any you want to hold back.</span></div>'+
-      '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th><input type="checkbox" id="pickall"'+(allOn?' checked':'')+' aria-label="Select all"></th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Fundraiser</th><th>Signed up</th><th>Method</th><th class="r">Amount</th><th>2nd debit cleared</th><th class="r">Fee</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th><input type="checkbox" id="pickall"'+(allOn?' checked':'')+' aria-label="Select all"></th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Fundraiser</th><th>Signed up</th><th>Method</th><th class="r">Amount</th><th>2nd debit cleared</th><th class="r">Fee (7 × monthly)</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
       '<div class="actionbar" id="actionbar"></div></div>';
   } else {
     html += '<div class="panel"><h2>Nothing to invoice this week</h2><p class="hint">Every sign-up with 2 successful debits is on an invoice. The next debit run is '+fmtDay(NEXT_RUN)+': '+plural(oneDebit,'sign-up')+' with 1 successful debit can qualify then.'+(mine.length?' You created '+plural(mine.length,'invoice')+' in this browser.':'')+'</p>'+(mine.length?'<div><button type="button" class="btn quiet" id="reset">Reset the demo</button></div>':'')+'</div>';
@@ -787,8 +790,8 @@ function viewInvoicing(){
 function selected(){ return readyList().filter(function(r){ return state.sel && state.sel[r.eg]; }); }
 function renderActionBar(){
   var bar = document.getElementById('actionbar'); if(!bar) return;
-  var sel = selected(), sub = sel.length*FEE, gst=Math.round(sub*GST*100)/100;
-  bar.innerHTML = '<div class="sum"><span><b>'+sel.length+'</b> selected</span><span>Subtotal <b>'+money(sub)+'</b></span><span>GST <b>'+money(gst)+'</b></span><span>Total <b>'+money(sub+gst)+'</b></span></div>'+
+  var sel = selected(), sub = feeTotal(sel), gst = gstOf(sub);
+  bar.innerHTML = '<div class="sum"><span><b>'+sel.length+'</b> selected</span><span>Fees <b>'+money(sub)+'</b></span><span>GST <b>'+money(gst)+'</b></span><span>Total inc GST <b>'+money(sub+gst)+'</b></span></div>'+
     '<button type="button" class="btn" id="review"'+(sel.length?'':' disabled')+'>Review invoice</button>';
 }
 function bindInvoicing(){
@@ -809,9 +812,10 @@ function invoiceTable(list){
 function invoiceDoc(inv, preview){
   var x = inv ? invoiceInfo(inv) : null, lines, sub, gst, total, num, date;
   if(inv){ lines=x.lines; sub=x.sub; gst=x.gst; total=x.total; num=inv.num; date=inv.date; }
-  else { lines=selected(); sub=lines.length*FEE; gst=Math.round(sub*GST*100)/100; total=sub+gst; num=nextInvNum(); date=TODAY; }
+  else { lines=selected(); sub=feeTotal(lines); gst=gstOf(sub); total=sub+gst; num=nextInvNum(); date=TODAY; }
+  var monthlyTotal = lines.reduce(function(a,r){ return a+r.amount; },0);
   var rows = lines.map(function(r,i){
-    return '<tr><td class="num" data-l="Line">'+(i+1)+'</td><td class="lead mono" data-l="Evergiving ID">'+r.eg+'</td><td class="mono" data-l="Client ID">'+(r.client||'–')+'</td><td data-l="Donor">'+esc(r.donor)+'</td><td class="num" data-l="Signed up">'+fmt(r.signup)+'</td><td class="num r" data-l="Monthly">'+money(r.amount)+'</td><td class="num" data-l="2nd debit cleared">'+fmt(r.qualify)+'</td><td class="num r" data-l="Fee">'+money(FEE)+'</td></tr>';
+    return '<tr><td class="num" data-l="Line">'+(i+1)+'</td><td class="lead mono" data-l="Evergiving ID">'+r.eg+'</td><td class="mono" data-l="Client ID">'+(r.client||'–')+'</td><td data-l="Donor">'+esc(r.donor)+'</td><td class="num" data-l="Signed up">'+fmt(r.signup)+'</td><td class="num" data-l="2nd debit cleared">'+fmt(r.qualify)+'</td><td class="num r" data-l="Monthly">'+money(r.amount)+'</td><td class="num r" data-l="Fee (7 × monthly)">'+money(fee(r))+'</td></tr>';
   }).join('');
   return '<div class="invdoc">'+
     '<div class="invgrid">'+
@@ -820,11 +824,13 @@ function invoiceDoc(inv, preview){
       '<div><span class="k">From</span>'+AGENCY+' (fundraising agency)</div>'+
       '<div><span class="k">To</span>'+CLIENT+'</div>'+
       '<div><span class="k">For</span>Champion sign-ups with 2 successful debits</div>'+
+      '<div><span class="k">Fee</span>7 × monthly amount per sign-up, ex GST</div>'+
       (inv?'<div><span class="k">Status</span>'+x.status+'</div>':'')+
     '</div>'+
-    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>#</th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Signed up</th><th class="r">Monthly</th><th>2nd debit cleared</th><th class="r">Fee</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
-    '<div class="totals"><div><span>'+plural(lines.length,'sign-up')+' × '+money(FEE)+'</span><span>'+money(sub)+'</span></div><div><span>GST 10%</span><span>'+money(gst)+'</span></div><div class="grand"><span>Total</span><span>'+money(total)+'</span></div></div>'+
-    '<p class="small muted">Example only, not a real invoice. Fee is a placeholder.</p>'+
+    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>#</th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Signed up</th><th>2nd debit cleared</th><th class="r">Monthly</th><th class="r">Fee (7 × monthly)</th></tr></thead><tbody>'+rows+'</tbody>'+
+      '<tfoot><tr><td colspan="6">Total, '+plural(lines.length,'sign-up')+'</td><td class="num r">'+money(monthlyTotal)+'</td><td class="num r">'+money(sub)+'</td></tr></tfoot></table></div>'+
+    '<div class="totals"><div><span>Fees, '+plural(lines.length,'sign-up')+' (7 × '+money(monthlyTotal)+' monthly)</span><span>'+money(sub)+'</span></div><div><span>GST 10%</span><span>'+money(gst)+'</span></div><div class="grand"><span>Total inc GST</span><span>'+money(total)+'</span></div></div>'+
+    '<p class="small muted">Example only, not a real invoice. Made-up sign-ups.</p>'+
   '</div>';
 }
 function openReview(){
@@ -861,7 +867,7 @@ function openInvoice(num, created){
     invoiceDoc(inv,false)+
     '<div class="mfoot"><button type="button" class="btn quiet" id="copy-inv">Copy lines (CSV)</button><button type="button" class="btn" id="show-inv">Show these '+x.lines.length+' sign-ups</button></div>');
   document.getElementById('copy-inv').addEventListener('click', function(){
-    var csv = 'invoice_no,line,evergiving_id,client_id,donor,signed_up,monthly_amount,second_debit,fee_ex_gst\n'+x.lines.map(function(r,i){ return [inv.num,i+1,r.eg,r.client||'',r.donor,iso(r.signup),r.amount.toFixed(2),iso(r.qualify),FEE.toFixed(2)].join(','); }).join('\n');
+    var csv = 'invoice_no,line,evergiving_id,client_id,donor,signed_up,monthly_amount,second_debit,fee_ex_gst\n'+x.lines.map(function(r,i){ return [inv.num,i+1,r.eg,r.client||'',r.donor,iso(r.signup),r.amount.toFixed(2),iso(r.qualify),fee(r).toFixed(2)].join(','); }).join('\n');
     copyText(csv, inv.num+' lines');
   });
   document.getElementById('show-inv').addEventListener('click', function(){
@@ -1033,7 +1039,7 @@ function viewData(){
     '<div class="panel"><h2>How it could arrive</h2><ul style="margin:0;padding-left:20px;display:grid;gap:6px"><li>One row per debit attempt, successful or failed.</li><li>A weekly file (CSV) or an API, before our Friday invoice run.</li><li>Cancellations and payment-detail changes in the same file, or a second one.</li><li>Only the donor’s initial and masked surname are needed. No card or bank numbers.</li></ul></div>'+
     '<div class="panel"><div class="section-head"><h2>Example rows</h2><button type="button" class="btn quiet" id="copy-sample">Copy example CSV</button></div><p class="hint">The debit history of made-up sign-up <button type="button" class="linkbtn mono" data-eg="'+sample.eg+'">'+sample.eg+'</button> in the shape we would ask for.</p><div class="tablewrap"><pre class="mono" style="margin:0;padding:12px;font-size:12px;line-height:1.6;white-space:pre">'+esc(csv)+'</pre></div></div>'+
   '</div>'+
-  '<p class="hint">All figures, names and IDs in this wireframe are invented. Rates and fees are placeholders.</p>';
+  '<p class="hint">All figures, names and IDs in this wireframe are invented. Commission rates are placeholders; the fee is 7 × the monthly amount.</p>';
 }
 
 /* ---------------- Overlays ---------------- */
