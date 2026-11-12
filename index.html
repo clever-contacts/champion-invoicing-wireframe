@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Champion Invoicing Wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: a fixed EXAMPLE banner, an app bar with tabs, one working view per tab; a record opens in a right-hand drawer */
+  --bg:#eef1f5; --surface:#ffffff; --surface-2:#f5f7fa; --ink:#131a23; --muted:#56616e; --line:#d5dbe3;
+  --accent:#2156c4; --accent-soft:#e6edfb; --accent-ink:#ffffff;
+  --example:#5a2fc9; --example-ink:#ffffff;
+  --good:#16723a; --good-soft:#e2f3e8; --bad:#b3261e; --bad-soft:#fbe7e5; --neutral-soft:#e8ecf1;
+  --s1:#2a78d6; --s2:#eb6834; --track:#e3e7ec;
+  --font-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --bh:40px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1319; --surface:#161d26; --surface-2:#1b2430; --ink:#e7ecf2; --muted:#9ba8b6; --line:#2b3644;
+    --accent:#7fa8ff; --accent-soft:#1d2a44; --accent-ink:#0a1530;
+    --example:#7b55f0; --example-ink:#ffffff;
+    --good:#6fd394; --good-soft:#13301f; --bad:#ff8f86; --bad-soft:#3b1714; --neutral-soft:#25303c;
+    --s1:#3987e5; --s2:#d95926; --track:#26303c;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1319; --surface:#161d26; --surface-2:#1b2430; --ink:#e7ecf2; --muted:#9ba8b6; --line:#2b3644;
+  --accent:#7fa8ff; --accent-soft:#1d2a44; --accent-ink:#0a1530;
+  --example:#7b55f0; --example-ink:#ffffff;
+  --good:#6fd394; --good-soft:#13301f; --bad:#ff8f86; --bad-soft:#3b1714; --neutral-soft:#25303c;
+  --s1:#3987e5; --s2:#d95926; --track:#26303c;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--font-body);padding-top:var(--bh);-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:28px}
+h2{font-size:21px}
+h3{font-size:16px;letter-spacing:.01em}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--font-mono);font-size:13.5px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.nowrap{white-space:nowrap}
+
+/* Banner */
+.banner{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:12px;padding:8px 16px;
+  background-color:var(--example);color:var(--example-ink);font-size:13.5px;line-height:1.35;
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.09) 0 12px,transparent 12px 24px)}
+.banner .tag{font-family:var(--font-display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:4px;padding:0 8px;white-space:nowrap}
+.banner a{color:inherit;font-weight:600;white-space:nowrap;margin-left:auto;text-underline-offset:3px}
+@media (max-width:700px){.banner .long{display:none}}
+
+/* App bar */
+.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1280px;margin:0 auto;padding:14px 24px 0;display:grid;gap:8px}
+.brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.brand .title{font-family:var(--font-display);font-weight:700;font-size:22px}
+.brand .sub{color:var(--muted);font-size:13.5px}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs a{display:flex;align-items:center;gap:6px;padding:9px 14px 10px;border-bottom:2px solid transparent;color:var(--muted);text-decoration:none;font-weight:500;white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+.badge{display:inline-grid;place-items:center;min-width:22px;height:20px;padding:0 6px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+
+main{max-width:1280px;margin:0 auto;padding:24px;display:grid;gap:20px}
+.intro{display:grid;gap:6px}
+.lede{color:var(--muted);max-width:72ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:14px;min-width:0}
+.panel > h2{font-size:18px}
+.section{display:grid;gap:12px;min-width:0}
+.section-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.hint{color:var(--muted);font-size:13.5px}
+
+/* Filters */
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.field{display:grid;gap:4px;min-width:0}
+.field.grow{flex:1 1 260px}
+.field label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+input[type="search"],select{height:38px;border:1px solid var(--line);border-radius:7px;background:var(--surface-2);padding:0 10px;min-width:0}
+input[type="search"]{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13.5px}
+.chip b{font-weight:600;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:7px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.quiet{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;font:inherit}
+
+/* Status pills */
+.pill{font-family:var(--font-body);display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.pill i{font-style:normal;font-size:11px}
+.st-Debiting{background:var(--neutral-soft);color:var(--ink)}
+.st-Invoiceable{background:var(--accent);color:var(--accent-ink)}
+.st-Invoiced{background:var(--good-soft);color:var(--good)}
+.st-Failed{background:var(--bad-soft);color:var(--bad)}
+.st-Cancelled{background:transparent;color:var(--muted);border:1px dashed var(--muted)}
+.yes{font-weight:600;color:var(--good)}
+.no{color:var(--muted)}
+.res{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:13.5px;white-space:nowrap}
+.res.ok{color:var(--good)}
+.res.fail{color:var(--bad)}
+.res.pend{color:var(--muted)}
+
+/* Debit dots */
+.succ{display:inline-flex;align-items:center;gap:8px}
+.succ b{font-variant-numeric:tabular-nums;min-width:1ch}
+.dots{display:inline-flex;gap:3px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dot.ok{background:var(--good)}
+.dot.fail{background:var(--bad);border-radius:2px;transform:rotate(45deg) scale(.85)}
+.dot.pend{border:1.5px solid var(--muted)}
+.dot.next{border:1.5px dashed var(--muted)}
+
+/* Tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface-2);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;background:var(--surface-2);border-top:1px solid var(--line);border-bottom:0}
+th button.sort{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+th button.sort:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+th[aria-sort] button.sort{color:var(--ink)}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--accent-soft)}
+tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rtable td{white-space:nowrap}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.count{color:var(--muted);font-size:13.5px}
+
+@media (max-width:760px){
+  main{padding:16px;gap:16px}
+  .top-inner{padding:12px 16px 0}
+  h1{font-size:24px}
+  .rtable-wrap{border:0;background:transparent;overflow:visible}
+  .rtable thead{display:none}
+  .rtable,.rtable tbody{display:grid;gap:10px}
+  .rtable tr{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  .rtable td,.rtable td.r{display:grid;gap:1px;padding:0;border:0;white-space:normal;min-width:0;text-align:left;align-content:start}
+  .rtable td::before{content:attr(data-l);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .rtable td.lead{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600;font-size:16px}
+  .rtable td.lead::before{display:none}
+  .rtable td.check{grid-column:1 / -1}
+  .rtable td.check::before{display:none}
+  .rtable tfoot{display:none}
+  tr.click:hover td{background:transparent}
+}
+@media (min-width:761px){ .rtable td.lead .lead-pill{display:none} .lead-label{display:none} }
+@media (max-width:760px){ .rtable td.hide-m{display:none} }
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:2px;align-content:start}
+.tile .k{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tile .v{font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1.1}
+.tile .s{font-size:13px;color:var(--muted)}
+.tile.accent{border-color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+
+/* Bars in tables */
+.bar{display:inline-block;width:110px;height:8px;border-radius:4px;background:var(--track);vertical-align:middle;overflow:hidden}
+.bar > span{display:block;height:100%;border-radius:4px;background:var(--s1)}
+.bar.s2 > span{background:var(--s2)}
+.barcell{display:inline-flex;align-items:center;gap:8px}
+
+/* Drawer and modal */
+.scrim{position:fixed;left:0;right:0;bottom:0;top:var(--bh);background:rgba(8,12,20,.45);z-index:40}
+.drawer{position:fixed;top:var(--bh);right:0;bottom:0;width:min(720px,100%);background:var(--surface);z-index:45;box-shadow:-12px 0 40px rgba(0,0,0,.18);display:flex;flex-direction:column;border-left:1px solid var(--line)}
+.dhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dbody{padding:18px 20px 32px;overflow-y:auto;display:grid;gap:18px;align-content:start}
+.eyebrow{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--example)}
+.iconbtn{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;font-size:16px;flex:none}
+.standing{display:grid;gap:8px;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.standing.st-b-Invoiceable{border-color:var(--accent)}
+.standing.st-b-Failed{border-color:var(--bad)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;margin:0}
+.facts div{display:grid;gap:1px;min-width:0;align-content:start}
+.facts dt{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.facts dd{margin:0}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.timeline li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:6px 0;border-top:1px dashed var(--line);font-size:14px}
+.timeline li:first-child{border-top:0}
+.timeline .when{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.modal{position:fixed;left:0;right:0;bottom:0;top:var(--bh);z-index:50;display:grid;place-items:center;padding:16px}
+.mbox{position:relative;width:min(900px,100%);max-height:100%;overflow-y:auto;background:var(--surface);border-radius:12px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.3);display:grid;gap:16px;padding:20px}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.mfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.notice{padding:10px 14px;border-radius:8px;font-size:14px}
+.notice.good{background:var(--good-soft);color:var(--good);font-weight:500}
+.notice.info{background:var(--accent-soft)}
+.invdoc{position:relative;border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:14px;overflow:hidden;background:var(--surface)}
+.invdoc::after{content:"EXAMPLE";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:clamp(60px,14vw,140px);letter-spacing:.12em;color:var(--example);opacity:.07;transform:rotate(-14deg);pointer-events:none}
+.invgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 18px}
+.invgrid div{display:grid;gap:1px}
+.invgrid .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.totals{display:grid;justify-content:end;gap:4px;font-variant-numeric:tabular-nums}
+.totals div{display:grid;grid-template-columns:120px 120px;text-align:right;gap:12px}
+.totals .grand{font-weight:700;font-size:17px;border-top:1px solid var(--line);padding-top:6px}
+
+/* Invoicing action bar */
+.actionbar{position:sticky;bottom:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;padding:12px 16px;background:var(--surface);border:1px solid var(--accent);border-radius:10px;box-shadow:0 -6px 24px rgba(0,0,0,.08)}
+.actionbar .sum{display:flex;flex-wrap:wrap;gap:4px 18px;font-variant-numeric:tabular-nums}
+.actionbar .sum b{font-weight:700}
+input[type="checkbox"]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;vertical-align:middle}
+.rule{display:grid;gap:8px;padding:14px 16px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--line)}
+.rule ul{margin:0;padding-left:20px;display:grid;gap:3px}
+.feed{list-style:none;margin:0;padding:0;display:grid}
+.feed li{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.feed li:first-child{border-top:0}
+.feed .amt{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.feed .amt.up{color:var(--good)}
+.feed .amt.down{color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:20px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+textarea.csv{width:100%;min-height:160px;font-family:var(--font-mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:10px}
+@media (max-width:760px){
+  .facts{grid-template-columns:1fr 1fr}
+  .timeline li{grid-template-columns:84px 1fr}
+  .feed li{grid-template-columns:56px 1fr auto}
+  .mbox{padding:16px}
+  .totals div{grid-template-columns:100px 110px}
+}
+@media (prefers-reduced-motion: no-preference){
+  .drawer{animation:slide .18s ease-out}
+  @keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+}
+</style>
+</head>
+<body>
+<div class="banner" id="banner" role="note">
+  <span class="tag">Example</span>
+  <span><strong>Wireframe with made-up data.</strong> <span class="long">Every name, ID, amount and invoice is invented. It shows how per-debit history from the client would drive invoicing, reconciliation and commission.</span></span>
+  <a href="#data-needed">Data this needs</a>
+</div>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="title">Champion sign-ups</span>
+      <span class="sub">Invoicing and commission · Client: Example Charity · Mock date: Fri 13 Nov 2026</span>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <a href="#signups" data-tab="signups">Sign-ups</a>
+      <a href="#invoicing" data-tab="invoicing">Weekly invoicing <span class="badge" id="inv-badge">0</span></a>
+      <a href="#reports" data-tab="reports">Reports</a>
+      <a href="#commissions" data-tab="commissions">Commissions</a>
+      <a href="#data-needed" data-tab="data-needed">Data needed</a>
+    </nav>
+  </div>
+</header>
+<main id="view" tabindex="-1"></main>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title"></aside>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------------- Settings for the example ---------------- */
+var CLIENT = 'Example Charity';
+var AGENCY = 'Clever';
+var FEE = 150;            // placeholder fee per qualifying sign-up, ex GST
+var GST = 0.10;
+var LS_KEY = 'champion-wireframe-v1';
+
+/* ---------------- Dates (whole days, UTC, no time zones) ---------------- */
+var DAY = 864e5;
+function dnum(y,m,d){ return Math.round(Date.UTC(y,m-1,d)/DAY); }
+function ymd(n){ var t=new Date(n*DAY); return [t.getUTCFullYear(), t.getUTCMonth()+1, t.getUTCDate()]; }
+function dow(n){ return new Date(n*DAY).getUTCDay(); }
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONLONG=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function fmt(n){ var a=ymd(n); return a[2]+' '+MON[a[1]-1]+' '+a[0]; }
+function fmtShort(n){ var a=ymd(n); return a[2]+' '+MON[a[1]-1]; }
+function fmtDay(n){ return DOWS[dow(n)]+' '+fmt(n); }
+function pad(x){ return (x<10?'0':'')+x; }
+function dmy(n){ var a=ymd(n); return pad(a[2])+'/'+pad(a[1])+'/'+a[0]; }
+function iso(n){ var a=ymd(n); return a[0]+'-'+pad(a[1])+'-'+pad(a[2]); }
+function monthKey(n){ var a=ymd(n); return a[0]*100+a[1]; }
+function monthLabel(k){ return MONLONG[(k%100)-1]+' '+Math.floor(k/100); }
+function monthShort(k){ return MON[(k%100)-1]+' '+Math.floor(k/100); }
+function firstThu(y,m){ var n=dnum(y,m,1); while(dow(n)!==4) n++; return n; }
+function nextRun(n){ var a=ymd(n), y=a[0], m=a[1]; var c=firstThu(y,m); if(c>n) return c; m++; if(m>12){m=1;y++;} return firstThu(y,m); }
+function isRunDay(n){ var a=ymd(n); return firstThu(a[0],a[1])===n; }
+function addBiz(n,k){ while(k>0){ n++; var w=dow(n); if(w!==0&&w!==6) k--; } return n; }
+function clock(mins){ var h=Math.floor(mins/60), m=mins%60; var ap=h>=12?'pm':'am'; var hh=h%12||12; return hh+':'+pad(m)+' '+ap; }
+var TODAY = dnum(2026,11,13);
+var NEXT_RUN = nextRun(TODAY);
+var NEXT_PAYRUN = TODAY+6;
+
+/* ---------------- Seeded random, so every viewer sees the same data ---------------- */
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+var R = mulberry32(20261113);
+function ri(a,b){ return a+Math.floor(R()*(b-a+1)); }
+function pick(arr){ return arr[Math.floor(R()*arr.length)]; }
+function wpick(list){ var tot=0,i; for(i=0;i<list.length;i++) tot+=list[i].w; var x=R()*tot; for(i=0;i<list.length;i++){ x-=list[i].w; if(x<0) return list[i]; } return list[list.length-1]; }
+
+/* ---------------- Reference lists (all invented) ---------------- */
+var FUND = [
+  ['J. Calloway',1.35],['M. Brennan',1.2],['S. Nakamura',1.1],['T. Okafor',1.3],['R. Delacroix',0.9],
+  ['A. Whitcombe',1.0],['L. Fenwick',0.8],['K. Moreau',1.0],['D. Ashdown',0.75,dnum(2026,9,1)],['P. Lindqvist',0.9],
+  ['H. Varga',0.7,dnum(2026,10,5)],['E. Quinlan',1.0],['B. Tremaine',0.85,null,dnum(2026,9,25)],['N. Castellano',0.9]
+].map(function(a,i){ return {id:i+1, name:a[0], w:a[1], start:a[2]||null, end:a[3]||null}; });
+
+var CC_REASONS = [
+  {code:'51', text:'Insufficient funds', terminal:false, w:46},
+  {code:'05', text:'Do not honour', terminal:false, w:20},
+  {code:'54', text:'Expired card', terminal:true, w:14},
+  {code:'91', text:'Card issuer unavailable', terminal:false, w:6},
+  {code:'57', text:'Transaction not permitted to cardholder', terminal:false, w:4},
+  {code:'41', text:'Lost card', terminal:true, w:4},
+  {code:'43', text:'Stolen card', terminal:true, w:3},
+  {code:'62', text:'Restricted card', terminal:true, w:3}
+];
+var CC_BAD = {code:'14', text:'Invalid card number', terminal:true};
+var DD_REASONS = [
+  {code:'6', text:'Insufficient funds (dishonour)', terminal:false, w:34},
+  {code:'6', text:'Refer to customer', terminal:false, w:26},
+  {code:'2', text:'Payment stopped', terminal:true, w:12},
+  {code:'3', text:'Account closed', terminal:true, w:12},
+  {code:'5', text:'No account / incorrect account number', terminal:true, w:5},
+  {code:'1', text:'Invalid BSB number', terminal:true, w:2}
+];
+var DD_BAD = [{code:'5', text:'No account / incorrect account number', terminal:true},{code:'1', text:'Invalid BSB number', terminal:true}];
+var EARLY_CANCEL = ['Changed mind at welcome call','Cooling-off request','Partner did not agree','Already gives monthly'];
+var LATER_CANCEL = ['Financial hardship','Cost of living','Changed mind','Giving to another charity','Moving overseas','Too many contacts'];
+var AMOUNTS = [{v:10,w:7},{v:15,w:9},{v:20,w:24},{v:25,w:12},{v:30,w:18},{v:35,w:4},{v:40,w:8},{v:50,w:10},{v:60,w:2},{v:75,w:3},{v:100,w:3}];
+var TIERS = [{v:'steady',w:70,p:0.03},{v:'shaky',w:19,p:0.22},{v:'struggling',w:11,p:0.5}];
+var FI = 'AABCCDDEEGHJJJKKLLMMMNPRSSSTTW';
+var LI = 'ABBBCCDDFGGHHKLLMMMNOPPRSSSTTWWY';
+
+/* ---------------- Generate sign-ups ---------------- */
+var MONTHS = [[2026,7,104],[2026,8,97],[2026,9,108],[2026,10,101],[2026,11,44]];
+var recs = [];
+MONTHS.forEach(function(mm){
+  var y=mm[0], m=mm[1], count=mm[2], days=[];
+  var last = new Date(Date.UTC(y,m,0)).getUTCDate();
+  for(var d=1; d<=last; d++){ var n=dnum(y,m,d); if(n>TODAY) break; if(dow(n)!==0) days.push(n); }
+  for(var i=0;i<count;i++){
+    var day = days[Math.floor(R()*days.length)];
+    var mins = 9*60 + ri(0,510);
+    if(day===TODAY) mins = 9*60 + ri(0,240);
+    var avail = FUND.filter(function(f){ return (!f.start||day>=f.start) && (!f.end||day<=f.end); });
+    var fr = wpick(avail);
+    recs.push({signup:day, mins:mins, fr:fr});
+  }
+});
+recs.sort(function(a,b){ return a.signup-b.signup || a.mins-b.mins; });
+
+var egSeq = 90140000, clSeq = 0;
+recs.forEach(function(r){
+  egSeq += ri(3,38);
+  r.eg = String(egSeq);
+  clSeq += ri(1,5);
+  var loaded = addBiz(r.signup, R()<0.7?1:2);
+  r.clientLoaded = loaded<=TODAY ? loaded : null;
+  r.client = r.clientLoaded ? String(4010000+clSeq) : null;
+  r.amount = wpick(AMOUNTS).v;
+  r.method = R()<0.56 ? 'CC' : 'DD';
+  var len = ri(4,10);
+  r.donor = FI[Math.floor(R()*FI.length)] + '. ' + LI[Math.floor(R()*LI.length)] + new Array(len).join('*');
+  r.tier = wpick(TIERS);
+  simulate(r);
+});
+
+function simulate(r){
+  var cc = r.method==='CC';
+  var c = R(), cancel=null;
+  if(c<0.085) cancel = {date:r.signup+ri(1,9), reason:pick(EARLY_CANCEL)};
+  else if(c<0.165) cancel = {date:r.signup+ri(10,45), reason:pick(LATER_CANCEL)};
+  else if(c<0.20) cancel = {date:r.signup+ri(45,135), reason:pick(LATER_CANCEL)};
+  if(cancel && cancel.date>TODAY) cancel=null;
+  r.cancel = cancel;
+  r.first = cc ? r.signup : addBiz(r.signup,2);
+  r.attempts = []; r.events = []; r.stopped = null;
+  var d = r.first, consec = 0, k = 0;
+  while(d<=TODAY){
+    if(cancel && d>cancel.date) break;
+    k++;
+    var ok=true, reason=null;
+    if(k===1 && R()<0.035){ ok=false; reason = cc ? CC_BAD : pick(DD_BAD); }
+    else if(R()<r.tier.p){ ok=false; reason = wpick(cc?CC_REASONS:DD_REASONS); }
+    var resultDate = cc ? d : addBiz(d,3);
+    var pending = resultDate>TODAY;
+    r.attempts.push({k:k, date:d, ok:ok, reason:reason, result:resultDate, pending:pending});
+    if(pending) break;
+    if(ok){ consec=0; }
+    else{
+      consec++;
+      if(reason.terminal){
+        var nx = nextRun(d), ud = d+ri(3,16);
+        if(R()<0.35 && ud<nx && ud<=TODAY && !(cancel && ud>cancel.date)){
+          r.events.push({date:ud, text: cc ? 'Donor supplied new card details' : 'Donor supplied new bank account details'});
+          consec=0;
+        } else { r.stopped = {date:d, reason:reason, lapsed:false}; break; }
+      } else if(consec>=3){ r.stopped = {date:d, reason:reason, lapsed:true}; break; }
+    }
+    d = nextRun(d);
+  }
+  r.succ = r.attempts.filter(function(a){ return a.ok && !a.pending; });
+  r.fails = r.attempts.filter(function(a){ return !a.ok && !a.pending; });
+  r.pendingAttempt = r.attempts.filter(function(a){ return a.pending; })[0] || null;
+  r.qualify = r.succ.length>=2 ? r.succ[1].result : null;
+  r.inv = null;
+}
+
+var byEg = {};
+recs.forEach(function(r){ byEg[r.eg]=r; });
+
+/* ---------------- Past weekly invoices (every Friday that had something to invoice) ---------------- */
+var invoices = [], invSeq = 1001;
+for(var F=dnum(2026,8,7); F<TODAY; F+=7){
+  var lines = recs.filter(function(r){ return r.qualify!=null && r.qualify<=F && !r.inv; });
+  if(!lines.length) continue;
+  var inv = {num:'INV-'+(invSeq++), date:F, ids:lines.map(function(r){return r.eg;}), seeded:true};
+  lines.forEach(function(r){ r.inv = inv.num; });
+  invoices.push(inv);
+}
+var invByNum = {};
+invoices.forEach(function(i){ invByNum[i.num]=i; });
+
+/* ---------------- Invoices made in this browser (demo only) ---------------- */
+function loadSaved(){
+  try{
+    var raw = window.localStorage && localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    var s = JSON.parse(raw);
+    (s.invoices||[]).forEach(function(si){
+      var ids = (si.ids||[]).filter(function(id){ var r=byEg[id]; return r && r.qualify!=null && !r.inv; });
+      if(!ids.length) return;
+      var inv = {num:nextInvNum(), date:TODAY, ids:ids, seeded:false};
+      ids.forEach(function(id){ byEg[id].inv = inv.num; });
+      invoices.push(inv); invByNum[inv.num]=inv;
+    });
+  }catch(e){}
+}
+function saveState(){
+  try{
+    if(!window.localStorage) return;
+    localStorage.setItem(LS_KEY, JSON.stringify({invoices: invoices.filter(function(i){return !i.seeded;}).map(function(i){ return {ids:i.ids}; })}));
+  }catch(e){}
+}
+function nextInvNum(){ var mx=1000; invoices.forEach(function(i){ var n=+i.num.slice(4); if(n>mx) mx=n; }); return 'INV-'+(mx+1); }
+loadSaved();
+
+/* ---------------- Derived values ---------------- */
+function status(r){
+  if(r.qualify!=null) return r.inv ? 'Invoiced' : 'Invoiceable';
+  if(r.cancel) return 'Cancelled';
+  if(r.stopped) return 'Failed';
+  return 'Debiting';
+}
+var STATUSES = ['Debiting','Invoiceable','Invoiced','Failed','Cancelled'];
+var ICON = {Debiting:'◔', Invoiceable:'●', Invoiced:'✓', Failed:'✕', Cancelled:'–'};
+function nextDebit(r){
+  if(r.pendingAttempt) return null;
+  if(!r.attempts.length) return r.first;
+  return nextRun(r.attempts[r.attempts.length-1].date);
+}
+function expectedQualify(r){
+  var need = 2 - r.succ.length, dates=[], d;
+  if(r.pendingAttempt){ dates.push(r.pendingAttempt.result); d = nextRun(r.pendingAttempt.date); }
+  else d = nextDebit(r);
+  while(dates.length<need){ dates.push(r.method==='CC' ? d : addBiz(d,3)); d = nextRun(d); }
+  return dates[need-1];
+}
+function invoiceInfo(inv){
+  var lines = inv.ids.map(function(id){ return byEg[id]; });
+  var sub = lines.length*FEE, gst = Math.round(sub*GST*100)/100;
+  return {lines:lines, sub:sub, gst:gst, total:sub+gst, status: inv.date+14<=TODAY ? 'Paid' : 'Awaiting payment'};
+}
+function rate(amount){ return amount>=40 ? 30 : amount>=20 ? 20 : 10; }
+function commission(r){
+  var amt = rate(r.amount), st = status(r);
+  if(st==='Invoiced'){
+    var inv = invByNum[r.inv], pay = inv.date+6;
+    if(pay<=TODAY) return {state:'Paid', amt:amt, date:pay, why:'Paid in the '+fmt(pay)+' pay run'};
+    return {state:'Earned', amt:amt, date:pay, why:'Earned '+fmtShort(r.qualify)+'. Pays in the '+fmt(pay)+' pay run'};
+  }
+  if(st==='Invoiceable') return {state:'Earned', amt:amt, date:NEXT_PAYRUN, why:'Earned '+fmtShort(r.qualify)+'. Pays in the pay run after it is invoiced'};
+  if(st==='Debiting') { var e=expectedQualify(r); return {state:'Expected', amt:amt, date:e, why:'Expected from '+fmt(e)+' if the next debits go through'}; }
+  if(st==='Cancelled') return {state:'Lost', amt:amt, date:r.cancel.date, why:'Donor cancelled '+fmtShort(r.cancel.date)+' ('+r.cancel.reason+') with '+r.succ.length+' of 2 debits'};
+  return {state:'Lost', amt:amt, date:r.stopped.date, why:'Debits stopped '+fmtShort(r.stopped.date)+': '+r.stopped.reason.text+(r.stopped.lapsed?' (3rd failure in a row)':'')};
+}
+
+/* ---------------- Helpers ---------------- */
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function money(v){ var neg=v<0; v=Math.abs(v); var s=v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); return (neg?'−':'')+'$'+s; }
+function money0(v){ return '$'+Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+function pct(a,b){ return b ? Math.round(a*100/b)+'%' : '–'; }
+function plural(n,w,ws){ return n+' '+(n===1?w:(ws||w+'s')); }
+function pill(st){ return '<span class="pill st-'+st+'"><i aria-hidden="true">'+ICON[st]+'</i>'+st+'</span>'; }
+function methodLong(m){ return m==='CC' ? 'Credit card' : 'Direct debit'; }
+function dots(r){
+  var h = r.attempts.slice(-8).map(function(a){
+    var c = a.pending ? 'pend' : a.ok ? 'ok' : 'fail';
+    var t = fmt(a.date)+': '+(a.pending?'result due '+fmt(a.result):a.ok?'successful':'failed, '+a.reason.text);
+    return '<span class="dot '+c+'" title="'+esc(t)+'"></span>';
+  }).join('');
+  var st = status(r);
+  if(st==='Debiting' && !r.pendingAttempt) h += '<span class="dot next" title="Next debit '+fmt(nextDebit(r))+'"></span>';
+  return '<span class="dots" aria-hidden="true">'+h+'</span>';
+}
+function succCell(r){
+  var f = r.fails.length;
+  return '<span class="succ"><b>'+r.succ.length+'</b>'+dots(r)+'</span>'+(f?' <span class="small muted nowrap">'+f+' failed</span>':'');
+}
+function resultCell(a){
+  if(a.pending) return '<span class="res pend">○ Awaiting result</span>';
+  if(a.ok) return '<span class="res ok">✓ Successful</span>';
+  return '<span class="res fail">✕ Failed</span>';
+}
+var toastTimer=null;
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.hidden=true; },3800); }
+function copyText(text, label){
+  function fallback(){ openModalHTML('<div class="mhead"><div><div class="eyebrow">Example data</div><h2 id="modal-title">Copy '+esc(label)+'</h2></div><button class="iconbtn" data-close aria-label="Close">✕</button></div><p class="hint">Your browser blocked automatic copying. Select the text below and copy it.</p><textarea class="csv" id="csvbox" readonly>'+esc(text)+'</textarea>'); var b=document.getElementById('csvbox'); if(b){ b.focus(); b.select(); } }
+  try{
+    navigator.clipboard.writeText(text).then(function(){ toast('Copied '+label+' to the clipboard'); }, fallback);
+  }catch(e){ fallback(); }
+}
+
+/* ---------------- State ---------------- */
+var TABS = ['signups','invoicing','reports','commissions','data-needed'];
+var state = {
+  tab:'signups',
+  su:{q:'', field:'all', method:'all', month:'all', status:'all', sort:'signup', dir:-1, page:0},
+  sel:null,
+  cm:{month:'all'}
+};
+var PAGE = 50;
+var view = document.getElementById('view');
+
+/* ---------------- Sign-ups ---------------- */
+var FIELDS = [['all','All fields'],['eg','Evergiving ID'],['client','Client ID'],['donor','Donor'],['fr','Fundraiser'],['amount','Amount'],['signup','Sign-up date'],['method','Method'],['status','Status'],['inv','Invoice no.']];
+function hayField(r,f){
+  switch(f){
+    case 'eg': return r.eg;
+    case 'client': return r.client || 'awaiting';
+    case 'donor': return r.donor.toLowerCase();
+    case 'fr': return r.fr.name.toLowerCase();
+    case 'amount': return r.amount+' '+r.amount+'.00 $'+r.amount+' $'+r.amount+'.00';
+    case 'signup': return (fmt(r.signup)+' '+dmy(r.signup)+' '+iso(r.signup)+' '+MONLONG[ymd(r.signup)[1]-1]).toLowerCase();
+    case 'method': return r.method==='CC' ? 'cc card credit card' : 'dd direct debit bank';
+    case 'status': return status(r).toLowerCase()+(r.qualify!=null?' invoiceable yes':' not invoiceable no');
+    case 'inv': return (r.inv||'').toLowerCase();
+  }
+  return '';
+}
+function hay(r,f){
+  if(f!=='all') return ' '+hayField(r,f)+' ';
+  return ' '+FIELDS.slice(1).map(function(x){ return hayField(r,x[0]); }).join(' | ')+' ';
+}
+function matches(r,q,f){
+  var h = hay(r,f);
+  if(/^\d+$/.test(q)) return h.indexOf(q)>=0;
+  return h.indexOf(' '+q)>=0;
+}
+function searchFilter(list){
+  var S=state.su, q=S.q.trim().toLowerCase().replace(/\s+/g,' ');
+  list = list.filter(function(r){
+    if(S.method!=='all' && r.method!==S.method) return false;
+    if(S.month!=='all' && String(monthKey(r.signup))!==S.month) return false;
+    return true;
+  });
+  if(!q) return list;
+  var phrase = list.filter(function(r){ return matches(r,q,S.field); });
+  if(phrase.length) return phrase;
+  var terms = q.split(' ');
+  return list.filter(function(r){ return terms.every(function(t){ return matches(r,t,S.field); }); });
+}
+var SORTS = {
+  eg:function(r){return +r.eg;}, client:function(r){return r.client?+r.client:9e9;}, donor:function(r){return r.donor;},
+  fr:function(r){return r.fr.name.slice(3);}, signup:function(r){return r.signup*10000+r.mins;}, method:function(r){return r.method;},
+  amount:function(r){return r.amount;}, succ:function(r){return r.succ.length;}, status:function(r){return STATUSES.indexOf(status(r));},
+  invoiceable:function(r){return r.qualify!=null?1:0;}, inv:function(r){return r.inv?+r.inv.slice(4):0;}
+};
+var COLS = [['eg','Evergiving ID'],['client','Client ID'],['donor','Donor'],['fr','Fundraiser'],['signup','Signed up'],['method','Method'],['amount','Amount','r'],['succ','Successful debits'],['status','Status'],['invoiceable','Invoiceable'],['inv','Invoice no.']];
+
+function viewSignups(){
+  var S=state.su;
+  var months = []; recs.forEach(function(r){ var k=monthKey(r.signup); if(months.indexOf(k)<0) months.push(k); });
+  return '<section class="intro"><h1>Sign-ups</h1><p class="lede">One row per champion sign-up, matched to '+CLIENT+'’s debit history. A sign-up becomes invoiceable at its 2nd successful debit. Click a row to see every debit attempt, including failed ones and the bank’s reason.</p></section>'+
+  '<div class="panel">'+
+    '<div class="filters">'+
+      '<div class="field grow"><label for="q">Search</label><input id="q" type="search" placeholder="Evergiving ID, client ID, name, $ amount, date, invoice no.…" value="'+esc(S.q)+'" autocomplete="off" spellcheck="false"></div>'+
+      '<div class="field"><label for="qf">Search in</label><select id="qf">'+FIELDS.map(function(f){ return '<option value="'+f[0]+'"'+(S.field===f[0]?' selected':'')+'>'+f[1]+'</option>'; }).join('')+'</select></div>'+
+      '<div class="field"><label for="fm">Method</label><select id="fm"><option value="all">CC and DD</option><option value="CC"'+(S.method==='CC'?' selected':'')+'>CC (card)</option><option value="DD"'+(S.method==='DD'?' selected':'')+'>DD (bank)</option></select></div>'+
+      '<div class="field"><label for="fmo">Signed up</label><select id="fmo"><option value="all">Any month</option>'+months.map(function(k){ return '<option value="'+k+'"'+(S.month===String(k)?' selected':'')+'>'+monthLabel(k)+'</option>'; }).join('')+'</select></div>'+
+      '<button class="btn quiet" id="fclear" type="button">Clear</button>'+
+    '</div>'+
+    '<div class="chips" id="chips" role="group" aria-label="Filter by status"></div>'+
+  '</div>'+
+  '<div id="su-results" class="section"></div>';
+}
+function renderSignupResults(){
+  var S=state.su;
+  var base = searchFilter(recs);
+  var counts = {all:base.length}; STATUSES.forEach(function(s){ counts[s]=0; });
+  base.forEach(function(r){ counts[status(r)]++; });
+  document.getElementById('chips').innerHTML = ['all'].concat(STATUSES).map(function(s){
+    return '<button type="button" class="chip" data-status="'+s+'" aria-pressed="'+(S.status===s)+'">'+(s==='all'?'All':s)+' <b>'+counts[s]+'</b></button>';
+  }).join('');
+  var list = S.status==='all' ? base : base.filter(function(r){ return status(r)===S.status; });
+  var key = SORTS[S.sort], dir=S.dir;
+  list = list.slice().sort(function(a,b){ var x=key(a), y=key(b); return (x<y?-1:x>y?1:0)*dir || (b.signup*10000+b.mins)-(a.signup*10000+a.mins); });
+  var pages = Math.max(1, Math.ceil(list.length/PAGE)); if(S.page>=pages) S.page=pages-1;
+  var from = S.page*PAGE, slice = list.slice(from, from+PAGE);
+  var head = '<thead><tr>'+COLS.map(function(c){
+    var sorted = S.sort===c[0];
+    return '<th class="'+(c[2]||'')+'"'+(sorted?' aria-sort="'+(dir>0?'ascending':'descending')+'"':'')+'><button type="button" class="sort" data-sort="'+c[0]+'">'+c[1]+(sorted?(dir>0?' ▲':' ▼'):'')+'</button></th>';
+  }).join('')+'</tr></thead>';
+  var body = slice.map(rowHTML).join('');
+  var html = '<div class="pager"><span class="count">'+(list.length? 'Showing '+(from+1)+'–'+(from+slice.length)+' of '+list.length+' sign-ups' : 'No sign-ups match. Try fewer words or another field.')+'</span>'+pagerBtns(S.page,pages)+'</div>';
+  if(list.length) html += '<div class="tablewrap rtable-wrap"><table class="rtable">'+head+'<tbody>'+body+'</tbody></table></div><div class="pager"><span class="count"></span>'+pagerBtns(S.page,pages)+'</div>';
+  document.getElementById('su-results').innerHTML = html;
+}
+function pagerBtns(p,pages){
+  if(pages<=1) return '';
+  return '<span style="display:flex;gap:8px;align-items:center"><button type="button" class="btn quiet" data-page="'+(p-1)+'"'+(p<=0?' disabled':'')+'>Previous</button><span class="count">Page '+(p+1)+' of '+pages+'</span><button type="button" class="btn quiet" data-page="'+(p+1)+'"'+(p>=pages-1?' disabled':'')+'>Next</button></span>';
+}
+function rowHTML(r){
+  var st=status(r);
+  return '<tr class="click" tabindex="0" data-eg="'+r.eg+'" aria-label="Open sign-up '+r.eg+'">'+
+    '<td class="lead mono" data-l="Evergiving ID">'+r.eg+'<span class="lead-pill">'+pill(st)+'</span></td>'+
+    '<td class="mono" data-l="Client ID">'+(r.client||'<span class="muted">Awaiting</span>')+'</td>'+
+    '<td data-l="Donor">'+esc(r.donor)+'</td>'+
+    '<td data-l="Fundraiser">'+esc(r.fr.name)+'</td>'+
+    '<td class="num" data-l="Signed up">'+fmt(r.signup)+'</td>'+
+    '<td data-l="Method"><span title="'+methodLong(r.method)+'">'+r.method+'</span></td>'+
+    '<td class="num r" data-l="Amount">'+money(r.amount)+'</td>'+
+    '<td data-l="Successful debits">'+succCell(r)+'</td>'+
+    '<td class="hide-m" data-l="Status">'+pill(st)+'</td>'+
+    '<td data-l="Invoiceable">'+(r.qualify!=null?'<span class="yes">Yes</span>':'<span class="no">No</span>')+'</td>'+
+    '<td class="mono" data-l="Invoice no.">'+(r.inv?'<button type="button" class="linkbtn mono" data-inv="'+r.inv+'">'+r.inv+'</button>':'<span class="muted">–</span>')+'</td>'+
+  '</tr>';
+}
+function bindSignups(){
+  var S=state.su, t=null;
+  document.getElementById('q').addEventListener('input', function(e){ S.q=e.target.value; S.page=0; clearTimeout(t); t=setTimeout(renderSignupResults,120); });
+  document.getElementById('qf').addEventListener('change', function(e){ S.field=e.target.value; S.page=0; renderSignupResults(); });
+  document.getElementById('fm').addEventListener('change', function(e){ S.method=e.target.value; S.page=0; renderSignupResults(); });
+  document.getElementById('fmo').addEventListener('change', function(e){ S.month=e.target.value; S.page=0; renderSignupResults(); });
+  document.getElementById('fclear').addEventListener('click', function(){ state.su={q:'',field:'all',method:'all',month:'all',status:'all',sort:'signup',dir:-1,page:0}; render(); });
+  renderSignupResults();
+}
+
+/* ---------------- Record drawer ---------------- */
+function standing(r){
+  var st=status(r), cc=r.method==='CC', n=r.succ.length, s;
+  var lands = cc ? 'went through' : 'cleared';
+  if(st==='Invoiced'){
+    var inv=invByNum[r.inv];
+    s = 'Invoiced on <b class="mono">'+r.inv+'</b> ('+fmt(inv.date)+'). It qualified when its 2nd successful debit '+lands+' on '+fmt(r.qualify)+'.';
+  } else if(st==='Invoiceable'){
+    s = '<b>Ready to invoice.</b> Its 2nd successful debit '+lands+' on '+fmt(r.qualify)+', so it goes on this week’s invoice.';
+  } else if(st==='Debiting'){
+    s = '<b>'+n+' of 2</b> successful debits so far. ';
+    if(r.pendingAttempt) s += 'The '+fmt(r.pendingAttempt.date)+' direct debit result is due '+fmt(r.pendingAttempt.result)+' (banks can return a dishonour for up to 3 business days). ';
+    else s += 'Next debit: '+fmtDay(nextDebit(r))+'. ';
+    s += 'If the debits go through it becomes invoiceable on '+fmt(expectedQualify(r))+'.';
+    if(r.fails.length && !r.fails[r.fails.length-1].reason.terminal && r.attempts[r.attempts.length-1] && !r.attempts[r.attempts.length-1].ok && !r.attempts[r.attempts.length-1].pending) s += ' The last attempt failed and will be tried again at the next monthly run.';
+  } else if(st==='Failed'){
+    var sp=r.stopped;
+    s = '<b>Not invoiceable.</b> Debits stopped on '+fmt(sp.date)+' after '+plural(n,'successful debit')+': '+esc(sp.reason.text)+(sp.lapsed?', the 3rd failure in a row.':'.')+(sp.reason.terminal?' Debits can restart only if the donor supplies new payment details.':'');
+  } else {
+    s = '<b>Not invoiceable.</b> The donor cancelled on '+fmt(r.cancel.date)+' ('+esc(r.cancel.reason)+') after '+plural(n,'successful debit')+'.';
+  }
+  if(r.qualify!=null && r.cancel) s += ' The donor cancelled later, on '+fmt(r.cancel.date)+' ('+esc(r.cancel.reason)+'). In this example that does not change the invoice or the commission.';
+  else if(r.qualify!=null && r.stopped) s += ' Debits later stopped on '+fmt(r.stopped.date)+' ('+esc(r.stopped.reason.text)+'), after it had qualified.';
+  return s;
+}
+function recordHTML(r){
+  var st=status(r), cc=r.method==='CC', c=commission(r);
+  var facts = [
+    ['Evergiving ID','<span class="mono">'+r.eg+'</span>'],
+    ['Client ID', r.client?'<span class="mono">'+r.client+'</span>':'<span class="muted">Awaiting. '+CLIENT+' loads new sign-ups 1–2 business days after sign-up</span>'],
+    ['Donor', esc(r.donor)],
+    ['Fundraiser', esc(r.fr.name)],
+    ['Signed up', fmtDay(r.signup)+', '+clock(r.mins)],
+    ['Payment method', methodLong(r.method)+' ('+r.method+')'],
+    ['Monthly amount', money(r.amount)],
+    ['Successful debits', r.succ.length+' <span class="muted">('+plural(r.attempts.length,'attempt')+')</span>'],
+    ['Invoiceable', r.qualify!=null?'<span class="yes">Yes</span>, from '+fmt(r.qualify):'<span class="no">No</span>'],
+    ['Invoice no.', r.inv?'<button type="button" class="linkbtn mono" data-inv="'+r.inv+'">'+r.inv+'</button>':'<span class="muted">Not invoiced</span>']
+  ];
+  var rows = r.attempts.map(function(a){
+    var label = a.k===1 ? 'First debit' : 'Monthly run';
+    return '<tr><td class="hide-m" data-l="#">'+a.k+'</td><td class="num lead" data-l="Debit date">'+fmt(a.date)+' <span class="small muted">'+label+'</span></td><td data-l="Result">'+resultCell(a)+'</td>'+
+      '<td data-l="Bank reason" style="white-space:normal">'+(a.ok||a.pending?'<span class="muted">–</span>':'<span class="mono small">'+a.reason.code+'</span> '+esc(a.reason.text)+'<div class="small muted">'+(a.reason.terminal?'Debits stop until new details':'Tried again next monthly run')+'</div>')+'</td>'+
+      '<td class="num" data-l="Result date">'+(a.pending?'Due '+fmt(a.result):fmt(a.result))+'</td></tr>';
+  }).join('');
+  if(!r.attempts.length) rows = '<tr><td colspan="5" class="muted">No debit attempts yet.</td></tr>';
+  var upcoming = '';
+  if(st==='Debiting' || (st!=='Failed' && st!=='Cancelled' && !r.cancel && !r.stopped)){
+    var nd = nextDebit(r);
+    if(nd) upcoming = '<p class="hint">Next scheduled debit: <b>'+fmtDay(nd)+'</b>.</p>';
+  }
+  var hist = [];
+  hist.push([r.signup,'Signed up with '+esc(r.fr.name)+' on the tablet, '+money(r.amount)+' a month by '+methodLong(r.method).toLowerCase()]);
+  if(r.clientLoaded) hist.push([r.clientLoaded, CLIENT+' loaded the donor as client ID <span class="mono">'+r.client+'</span>']);
+  r.attempts.forEach(function(a){ hist.push([a.date, 'Debit '+a.k+' '+(a.pending?'sent, result due '+fmt(a.result):a.ok?'successful':'failed: '+esc(a.reason.text))]); });
+  r.events.forEach(function(e){ hist.push([e.date, e.text+'. Debits continue at the next run']); });
+  if(r.qualify!=null) hist.push([r.qualify, '<b>Invoiceable</b>: 2nd successful debit']);
+  if(r.inv){ var iv=invByNum[r.inv]; hist.push([iv.date, 'Invoiced on <span class="mono">'+r.inv+'</span>']); }
+  if(c.state==='Paid') hist.push([c.date, 'Commission '+money(c.amt)+' paid to '+esc(r.fr.name)]);
+  if(r.cancel) hist.push([r.cancel.date, 'Donor cancelled: '+esc(r.cancel.reason)]);
+  if(r.stopped) hist.push([r.stopped.date, 'Debits stopped: '+esc(r.stopped.reason.text)]);
+  hist.sort(function(a,b){ return a[0]-b[0]; });
+  return '<div class="dhead"><div style="display:grid;gap:4px"><div class="eyebrow">Example record · made-up data</div><h2 id="drawer-title">'+esc(r.donor)+' <span class="mono muted" style="font-size:15px">'+r.eg+'</span></h2></div><button type="button" class="iconbtn" data-close aria-label="Close">✕</button></div>'+
+  '<div class="dbody">'+
+    '<div class="standing st-b-'+st+'"><div>'+pill(st)+'</div><p>'+standing(r)+'</p></div>'+
+    '<dl class="facts">'+facts.map(function(f){ return '<div><dt>'+f[0]+'</dt><dd>'+f[1]+'</dd></div>'; }).join('')+'</dl>'+
+    '<div class="section"><div class="section-head"><h3>Debit attempts</h3><span class="hint">'+(cc?'Card: first debit on the sign-up day':'Direct debit: first debit 2 business days after sign-up')+', then the first Thursday of each month</span></div>'+
+      '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>#</th><th>Debit date ('+money(r.amount)+')</th><th>Result</th><th>Bank reason (example codes)</th><th>Result date</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+upcoming+'</div>'+
+    '<div class="section"><h3>Commission (example)</h3><div class="standing"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><b>'+esc(r.fr.name)+' · '+c.state+' · '+money(c.amt)+'</b><button type="button" class="linkbtn" data-fr="'+r.fr.id+'">See '+esc(r.fr.name)+'’s commission</button></div><p class="hint">'+esc(c.why)+'.</p></div></div>'+
+    '<div class="section"><h3>History</h3><ol class="timeline">'+hist.map(function(h){ return '<li><span class="when">'+fmtShort(h[0])+'</span><span>'+h[1]+'</span></li>'; }).join('')+'</ol></div>'+
+  '</div>';
+}
+
+/* ---------------- Weekly invoicing ---------------- */
+function readyList(){ return recs.filter(function(r){ return status(r)==='Invoiceable'; }).sort(function(a,b){ return a.qualify-b.qualify || a.eg-b.eg; }); }
+function viewInvoicing(){
+  var ready = readyList();
+  if(state.sel===null) state.sel = {};
+  ready.forEach(function(r){ if(!(r.eg in state.sel)) state.sel[r.eg]=true; });
+  var oneDebit = recs.filter(function(r){ return status(r)==='Debiting' && r.succ.length===1; }).length;
+  var pend = recs.filter(function(r){ return status(r)==='Debiting' && r.pendingAttempt; }).length;
+  var mine = invoices.filter(function(i){ return !i.seeded; });
+  var html = '<section class="intro"><h1>Weekly invoicing</h1><p class="lede">Each Friday, invoice every sign-up that reached its 2nd successful debit since the last run. Tick the ones to bill and mark them invoiced: that creates the invoice and stamps its number on each sign-up, so every line reconciles to a record.</p></section>'+
+  '<div class="tiles">'+
+    '<div class="tile accent"><span class="k">This run</span><span class="v">'+fmtShort(TODAY)+'</span><span class="s">'+fmtDay(TODAY)+'</span></div>'+
+    '<div class="tile"><span class="k">Ready to invoice</span><span class="v">'+ready.length+'</span><span class="s">2 successful debits, not invoiced</span></div>'+
+    '<div class="tile"><span class="k">Fee per sign-up</span><span class="v">'+money0(FEE)+'</span><span class="s">Placeholder, ex GST</span></div>'+
+    '<div class="tile"><span class="k">Next debit run</span><span class="v">'+fmtShort(NEXT_RUN)+'</span><span class="s">'+plural(oneDebit,'sign-up')+' could qualify</span></div>'+
+  '</div>';
+  if(ready.length){
+    var rows = ready.map(function(r){
+      var on = !!state.sel[r.eg];
+      return '<tr><td class="check" data-l="Invoice"><label style="display:inline-flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" data-pick="'+r.eg+'"'+(on?' checked':'')+' aria-label="Include '+r.eg+'"><span class="small muted lead-label">Include</span></label></td>'+
+        '<td class="lead mono" data-l="Evergiving ID"><button type="button" class="linkbtn mono" data-eg="'+r.eg+'">'+r.eg+'</button></td>'+
+        '<td class="mono" data-l="Client ID">'+(r.client||'–')+'</td>'+
+        '<td data-l="Donor">'+esc(r.donor)+'</td>'+
+        '<td data-l="Fundraiser">'+esc(r.fr.name)+'</td>'+
+        '<td class="num" data-l="Signed up">'+fmt(r.signup)+'</td>'+
+        '<td data-l="Method">'+r.method+'</td>'+
+        '<td class="num r" data-l="Amount">'+money(r.amount)+'</td>'+
+        '<td class="num" data-l="2nd debit cleared">'+fmt(r.qualify)+'</td>'+
+        '<td class="num r" data-l="Fee">'+money(FEE)+'</td></tr>';
+    }).join('');
+    var allOn = ready.every(function(r){ return state.sel[r.eg]; });
+    html += '<div class="section"><div class="section-head"><h2>Ready to invoice</h2><span class="hint">Every row has 2 successful debits. Untick any you want to hold back.</span></div>'+
+      '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th><input type="checkbox" id="pickall"'+(allOn?' checked':'')+' aria-label="Select all"></th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Fundraiser</th><th>Signed up</th><th>Method</th><th class="r">Amount</th><th>2nd debit cleared</th><th class="r">Fee</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="actionbar" id="actionbar"></div></div>';
+  } else {
+    html += '<div class="panel"><h2>Nothing to invoice this week</h2><p class="hint">Every sign-up with 2 successful debits is on an invoice. The next debit run is '+fmtDay(NEXT_RUN)+': '+plural(oneDebit,'sign-up')+' with 1 successful debit can qualify then.'+(mine.length?' You created '+plural(mine.length,'invoice')+' in this browser.':'')+'</p>'+(mine.length?'<div><button type="button" class="btn quiet" id="reset">Reset the demo</button></div>':'')+'</div>';
+  }
+  html += '<div class="panel"><h2>Not ready yet</h2><p class="hint">'+plural(oneDebit,'sign-up')+' have 1 successful debit and can qualify at the '+fmtDay(NEXT_RUN)+' run. '+(pend?plural(pend,'direct debit')+' are waiting on a bank result. ':'')+'Sign-ups with failed debits only qualify once 2 debits go through.</p></div>';
+  html += '<div class="section"><div class="section-head"><h2>Recent invoices</h2><a href="#reports" class="small">All invoices in Reports</a></div>'+invoiceTable(invoices.slice().reverse().slice(0,6))+'</div>';
+  if(ready.length && mine.length) html += '<div><button type="button" class="btn quiet" id="reset">Reset the demo (remove invoices made in this browser)</button></div>';
+  return html;
+}
+function selected(){ return readyList().filter(function(r){ return state.sel && state.sel[r.eg]; }); }
+function renderActionBar(){
+  var bar = document.getElementById('actionbar'); if(!bar) return;
+  var sel = selected(), sub = sel.length*FEE, gst=Math.round(sub*GST*100)/100;
+  bar.innerHTML = '<div class="sum"><span><b>'+sel.length+'</b> selected</span><span>Subtotal <b>'+money(sub)+'</b></span><span>GST <b>'+money(gst)+'</b></span><span>Total <b>'+money(sub+gst)+'</b></span></div>'+
+    '<button type="button" class="btn" id="review"'+(sel.length?'':' disabled')+'>Review invoice</button>';
+}
+function bindInvoicing(){
+  renderActionBar();
+  var all = document.getElementById('pickall');
+  if(all) all.addEventListener('change', function(e){ readyList().forEach(function(r){ state.sel[r.eg]=e.target.checked; }); view.querySelectorAll('[data-pick]').forEach(function(cb){ cb.checked=e.target.checked; }); renderActionBar(); });
+  view.querySelectorAll('[data-pick]').forEach(function(cb){ cb.addEventListener('change', function(){ state.sel[cb.getAttribute('data-pick')]=cb.checked; if(all) all.checked = readyList().every(function(r){ return state.sel[r.eg]; }); renderActionBar(); }); });
+  var rs = document.getElementById('reset');
+  if(rs) rs.addEventListener('click', resetDemo);
+}
+function invoiceTable(list){
+  if(!list.length) return '<p class="hint">No invoices yet.</p>';
+  return '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Invoice no.</th><th>Date</th><th class="r">Sign-ups</th><th class="r">Subtotal</th><th class="r">GST</th><th class="r">Total</th><th>Status</th></tr></thead><tbody>'+
+    list.map(function(inv){ var x=invoiceInfo(inv);
+      return '<tr class="click" tabindex="0" data-inv="'+inv.num+'"><td class="lead mono" data-l="Invoice no.">'+inv.num+(inv.seeded?'':' <span class="pill st-Invoiceable" style="height:20px">New</span>')+'</td><td class="num" data-l="Date">'+fmt(inv.date)+'</td><td class="num r" data-l="Sign-ups">'+x.lines.length+'</td><td class="num r" data-l="Subtotal">'+money(x.sub)+'</td><td class="num r" data-l="GST">'+money(x.gst)+'</td><td class="num r" data-l="Total"><b>'+money(x.total)+'</b></td><td data-l="Status">'+(x.status==='Paid'?'<span class="res ok">✓ Paid</span>':'<span class="res pend">○ Awaiting payment</span>')+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+}
+function invoiceDoc(inv, preview){
+  var x = inv ? invoiceInfo(inv) : null, lines, sub, gst, total, num, date;
+  if(inv){ lines=x.lines; sub=x.sub; gst=x.gst; total=x.total; num=inv.num; date=inv.date; }
+  else { lines=selected(); sub=lines.length*FEE; gst=Math.round(sub*GST*100)/100; total=sub+gst; num=nextInvNum(); date=TODAY; }
+  var rows = lines.map(function(r,i){
+    return '<tr><td class="num" data-l="Line">'+(i+1)+'</td><td class="lead mono" data-l="Evergiving ID">'+r.eg+'</td><td class="mono" data-l="Client ID">'+(r.client||'–')+'</td><td data-l="Donor">'+esc(r.donor)+'</td><td class="num" data-l="Signed up">'+fmt(r.signup)+'</td><td class="num r" data-l="Monthly">'+money(r.amount)+'</td><td class="num" data-l="2nd debit cleared">'+fmt(r.qualify)+'</td><td class="num r" data-l="Fee">'+money(FEE)+'</td></tr>';
+  }).join('');
+  return '<div class="invdoc">'+
+    '<div class="invgrid">'+
+      '<div><span class="k">Tax invoice</span><b class="mono">'+num+(preview?' (draft)':'')+'</b></div>'+
+      '<div><span class="k">Invoice date</span>'+fmt(date)+'</div>'+
+      '<div><span class="k">From</span>'+AGENCY+' (fundraising agency)</div>'+
+      '<div><span class="k">To</span>'+CLIENT+'</div>'+
+      '<div><span class="k">For</span>Champion sign-ups with 2 successful debits</div>'+
+      (inv?'<div><span class="k">Status</span>'+x.status+'</div>':'')+
+    '</div>'+
+    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>#</th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Signed up</th><th class="r">Monthly</th><th>2nd debit cleared</th><th class="r">Fee</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div class="totals"><div><span>'+plural(lines.length,'sign-up')+' × '+money(FEE)+'</span><span>'+money(sub)+'</span></div><div><span>GST 10%</span><span>'+money(gst)+'</span></div><div class="grand"><span>Total</span><span>'+money(total)+'</span></div></div>'+
+    '<p class="small muted">Example only, not a real invoice. Fee is a placeholder.</p>'+
+  '</div>';
+}
+function openReview(){
+  var sel = selected(); if(!sel.length) return;
+  openModalHTML('<div class="mhead"><div style="display:grid;gap:4px"><div class="eyebrow">Review · example data</div><h2 id="modal-title">Invoice '+plural(sel.length,'sign-up')+'</h2></div><button type="button" class="iconbtn" data-close aria-label="Close">✕</button></div>'+
+    '<p class="hint">Marking these invoiced creates the invoice below and writes its number on each sign-up. Nothing is sent: this demo keeps it in your browser only.</p>'+
+    invoiceDoc(null,true)+
+    '<div class="mfoot"><button type="button" class="btn quiet" data-close>Back</button><button type="button" class="btn" id="confirm-inv">Mark '+plural(sel.length,'sign-up')+' invoiced</button></div>');
+  document.getElementById('confirm-inv').addEventListener('click', createInvoice);
+}
+function createInvoice(){
+  var sel = selected(); if(!sel.length) return;
+  var inv = {num:nextInvNum(), date:TODAY, ids:sel.map(function(r){return r.eg;}), seeded:false};
+  sel.forEach(function(r){ r.inv = inv.num; });
+  invoices.push(inv); invByNum[inv.num]=inv;
+  saveState();
+  updateBadge();
+  render();
+  openInvoice(inv.num, true);
+  toast(inv.num+' created and stamped on '+plural(sel.length,'sign-up'));
+}
+function resetDemo(){
+  invoices.filter(function(i){ return !i.seeded; }).forEach(function(inv){ inv.ids.forEach(function(id){ byEg[id].inv=null; }); delete invByNum[inv.num]; });
+  invoices = invoices.filter(function(i){ return i.seeded; });
+  state.sel = null;
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  updateBadge(); render(); toast('Demo reset. The invoices you made are gone.');
+}
+function openInvoice(num, created){
+  var inv = invByNum[num]; if(!inv) return;
+  var x = invoiceInfo(inv);
+  openModalHTML('<div class="mhead"><div style="display:grid;gap:4px"><div class="eyebrow">Invoice · example, not a real invoice</div><h2 id="modal-title" class="mono">'+inv.num+'</h2></div><button type="button" class="iconbtn" data-close aria-label="Close">✕</button></div>'+
+    (created?'<div class="notice good">Created. Each of these '+x.lines.length+' sign-ups now shows '+inv.num+' in Sign-ups, so every invoice line reconciles to one record.</div>':'')+
+    invoiceDoc(inv,false)+
+    '<div class="mfoot"><button type="button" class="btn quiet" id="copy-inv">Copy lines (CSV)</button><button type="button" class="btn" id="show-inv">Show these '+x.lines.length+' sign-ups</button></div>');
+  document.getElementById('copy-inv').addEventListener('click', function(){
+    var csv = 'invoice_no,line,evergiving_id,client_id,donor,signed_up,monthly_amount,second_debit,fee_ex_gst\n'+x.lines.map(function(r,i){ return [inv.num,i+1,r.eg,r.client||'',r.donor,iso(r.signup),r.amount.toFixed(2),iso(r.qualify),FEE.toFixed(2)].join(','); }).join('\n');
+    copyText(csv, inv.num+' lines');
+  });
+  document.getElementById('show-inv').addEventListener('click', function(){
+    state.su = {q:inv.num, field:'inv', method:'all', month:'all', status:'all', sort:'eg', dir:1, page:0};
+    closeModal(); go('signups');
+  });
+}
+
+/* ---------------- Reports ---------------- */
+function viewReports(){
+  var counts={}; STATUSES.forEach(function(s){ counts[s]=0; });
+  recs.forEach(function(r){ counts[status(r)]++; });
+  var invTotal = 0; invoices.forEach(function(i){ invTotal += invoiceInfo(i).total; });
+  var active = recs.filter(function(r){ return !r.cancel && !r.stopped; });
+  var monthly = active.reduce(function(a,r){ return a+r.amount; },0);
+  var tiles = '<div class="tiles">'+
+    '<div class="tile"><span class="k">Sign-ups</span><span class="v">'+recs.length+'</span><span class="s">1 Jul to '+fmtShort(TODAY)+' 2026</span></div>'+
+    '<div class="tile"><span class="k">Debiting</span><span class="v">'+counts.Debiting+'</span><span class="s">Fewer than 2 successful</span></div>'+
+    '<div class="tile accent"><span class="k">Invoiceable now</span><span class="v">'+counts.Invoiceable+'</span><span class="s">2 debits, not invoiced</span></div>'+
+    '<div class="tile"><span class="k">Invoiced</span><span class="v">'+counts.Invoiced+'</span><span class="s">'+money0(invTotal)+' inc GST</span></div>'+
+    '<div class="tile"><span class="k">Failed</span><span class="v">'+counts.Failed+'</span><span class="s">Debits stopped</span></div>'+
+    '<div class="tile"><span class="k">Cancelled</span><span class="v">'+counts.Cancelled+'</span><span class="s">Before 2 debits</span></div>'+
+  '</div>';
+  // by month
+  var mk=[], M={};
+  recs.forEach(function(r){ var k=monthKey(r.signup); if(!M[k]){ M[k]={n:0,cc:0,dd:0,amt:0,Debiting:0,Invoiceable:0,Invoiced:0,Failed:0,Cancelled:0}; mk.push(k); } var m=M[k]; m.n++; m[r.method==='CC'?'cc':'dd']++; m.amt+=r.amount; m[status(r)]++; });
+  var T={n:0,cc:0,dd:0,amt:0,Debiting:0,Invoiceable:0,Invoiced:0,Failed:0,Cancelled:0};
+  var mrows = mk.map(function(k){ var m=M[k]; Object.keys(T).forEach(function(f){ T[f]+=m[f]; });
+    return '<tr><td class="lead" data-l="Month">'+monthLabel(k)+'</td><td class="num r" data-l="Sign-ups"><b>'+m.n+'</b></td><td class="num r" data-l="CC / DD">'+m.cc+' / '+m.dd+'</td><td class="num r" data-l="Avg monthly">'+money(m.amt/m.n)+'</td><td class="num r" data-l="Debiting">'+m.Debiting+'</td><td class="num r" data-l="Invoiceable">'+m.Invoiceable+'</td><td class="num r" data-l="Invoiced">'+m.Invoiced+'</td><td class="num r" data-l="Failed">'+m.Failed+'</td><td class="num r" data-l="Cancelled">'+m.Cancelled+'</td><td data-l="Qualified">'+barCell(m.Invoiceable+m.Invoiced, m.n, '')+'</td></tr>';
+  }).join('');
+  var mfoot = '<tfoot><tr><td>Total</td><td class="num r">'+T.n+'</td><td class="num r">'+T.cc+' / '+T.dd+'</td><td class="num r">'+money(T.amt/T.n)+'</td><td class="num r">'+T.Debiting+'</td><td class="num r">'+T.Invoiceable+'</td><td class="num r">'+T.Invoiced+'</td><td class="num r">'+T.Failed+'</td><td class="num r">'+T.Cancelled+'</td><td>'+barCell(T.Invoiceable+T.Invoiced, T.n, '')+'</td></tr></tfoot>';
+  var byMonth = '<div class="section"><div class="section-head"><h2>Sign-ups by month</h2><span class="hint">Status today of each month’s sign-ups. Recent months are still debiting.</span></div>'+
+    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Month</th><th class="r">Sign-ups</th><th class="r">CC / DD</th><th class="r">Avg monthly</th><th class="r">Debiting</th><th class="r">Invoiceable</th><th class="r">Invoiced</th><th class="r">Failed</th><th class="r">Cancelled</th><th>Qualified (2 debits)</th></tr></thead><tbody>'+mrows+'</tbody>'+mfoot+'</table></div>'+
+    '<p class="hint">Active monthly giving (not cancelled or stopped): <b>'+money(monthly)+'</b> a month across '+active.length+' donors.</p></div>';
+  // debit runs
+  var runs={}, rk=[];
+  recs.forEach(function(r){ r.attempts.forEach(function(a){
+    var key = a.k>1 ? 'run'+a.date : 'first'+monthKey(a.date);
+    if(!runs[key]){ runs[key]={label: a.k>1 ? 'Monthly run '+fmtDay(a.date) : 'First debits, '+monthLabel(monthKey(a.date)), sortv: a.k>1 ? a.date : dnum(Math.floor(monthKey(a.date)/100), monthKey(a.date)%100, 1)+0.5, n:0, ok:0, fail:0, pend:0}; rk.push(key); }
+    var x=runs[key]; x.n++; if(a.pending) x.pend++; else if(a.ok) x.ok++; else x.fail++;
+  }); });
+  rk.sort(function(a,b){ return runs[b].sortv-runs[a].sortv; });
+  var runRows = rk.map(function(k){ var x=runs[k];
+    return '<tr><td class="lead" data-l="Debits">'+x.label+'</td><td class="num r" data-l="Attempts">'+x.n+'</td><td class="num r" data-l="Successful">'+x.ok+'</td><td class="num r" data-l="Failed">'+x.fail+'</td><td class="num r" data-l="Awaiting result">'+(x.pend||'–')+'</td><td data-l="Success rate">'+barCell(x.ok, x.ok+x.fail, '')+'</td></tr>';
+  }).join('');
+  var runTable = '<div class="section"><div class="section-head"><h2>Debit runs</h2><span class="hint">First debits are taken on or after the sign-up day; monthly runs are the first Thursday.</span></div><div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Debits</th><th class="r">Attempts</th><th class="r">Successful</th><th class="r">Failed</th><th class="r">Awaiting result</th><th>Success rate</th></tr></thead><tbody>'+runRows+'</tbody></table></div></div>';
+  // decline reasons
+  function reasons(method){
+    var cnt={}, keys=[], tot=0;
+    recs.forEach(function(r){ if(r.method!==method) return; r.fails.forEach(function(a){ var k=a.reason.code+'|'+a.reason.text; if(!cnt[k]){ cnt[k]={r:a.reason,n:0}; keys.push(k); } cnt[k].n++; tot++; }); });
+    keys.sort(function(a,b){ return cnt[b].n-cnt[a].n; });
+    var max = keys.length ? cnt[keys[0]].n : 1;
+    return '<div class="section"><div class="section-head"><h3>'+(method==='CC'?'Card (CC)':'Direct debit (DD)')+'</h3><span class="hint">'+plural(tot,'failed debit')+'</span></div><div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Bank reason (example codes)</th><th class="r">Failed</th><th>Share</th><th>What happens</th></tr></thead><tbody>'+
+      keys.map(function(k){ var x=cnt[k]; return '<tr><td class="lead" data-l="Reason"><span><span class="mono small muted">'+x.r.code+'</span> '+esc(x.r.text)+'</span></td><td class="num r" data-l="Failed">'+x.n+'</td><td data-l="Share">'+barCell(x.n, tot, method==='DD'?'s2':'', max)+'</td><td data-l="What happens" class="small">'+(x.r.terminal?'Debits stop until new details':'Tried again next monthly run')+'</td></tr>'; }).join('')+
+      '</tbody></table></div></div>';
+  }
+  var declines = '<div class="section"><div class="section-head"><h2>Why debits failed</h2><span class="hint">Only possible with per-debit history and decline reasons.</span></div><div class="grid2">'+reasons('CC')+reasons('DD')+'</div></div>';
+  var invHist = '<div class="section"><div class="section-head"><h2>Invoice history</h2><span class="hint">'+plural(invoices.length,'invoice')+' · '+money(invTotal)+' inc GST. Click one to see its lines.</span></div>'+invoiceTable(invoices.slice().reverse())+'</div>';
+  return '<section class="intro"><h1>Reports</h1><p class="lede">Where every sign-up stands today, how each debit run went and why debits failed. Every number here comes from the per-debit history.</p></section>'+tiles+byMonth+invHist+declines+runTable;
+}
+function barCell(a, b, cls, max){
+  var w = max ? Math.round(a*100/max) : (b ? Math.round(a*100/b) : 0);
+  return '<span class="barcell"><span class="bar '+(cls||'')+'" title="'+a+' of '+b+'"><span style="width:'+w+'%"></span></span><span class="num small">'+pct(a,b)+'</span></span>';
+}
+
+/* ---------------- Commissions ---------------- */
+function commRows(month){
+  var by = {};
+  FUND.forEach(function(f){ by[f.id] = {fr:f, n:0, Expected:[0,0], Earned:[0,0], Paid:[0,0], Lost:[0,0]}; });
+  recs.forEach(function(r){
+    if(month!=='all' && String(monthKey(r.signup))!==month) return;
+    var c = commission(r), x = by[r.fr.id];
+    x.n++; x[c.state][0]++; x[c.state][1]+=c.amt;
+  });
+  return FUND.map(function(f){ return by[f.id]; }).filter(function(x){ return x.n>0; }).sort(function(a,b){ return (b.Earned[1]+b.Paid[1]+b.Expected[1])-(a.Earned[1]+a.Paid[1]+a.Expected[1]); });
+}
+function commEvents(filterFr, fromDay){
+  var ev = [];
+  recs.forEach(function(r){
+    if(filterFr && r.fr.id!==filterFr) return;
+    var c = commission(r);
+    ev.push({date:r.signup, r:r, amt:c.amt, kind:'expected', cls:'', text:'Signed up, '+money(r.amount)+'/mo: commission expected'});
+    if(r.qualify!=null) ev.push({date:r.qualify, r:r, amt:c.amt, kind:'earned', cls:'up', text:'2nd successful debit: commission earned'});
+    else if(c.state==='Lost') ev.push({date:c.date, r:r, amt:c.amt, kind:'lost', cls:'down', text: r.cancel ? 'Donor cancelled ('+r.cancel.reason+') with '+r.succ.length+' of 2 debits: expected commission removed' : 'Debits stopped ('+r.stopped.reason.text+') with '+r.succ.length+' of 2 debits: expected commission removed'});
+    if(c.state==='Paid') ev.push({date:c.date, r:r, amt:c.amt, kind:'paid', cls:'', text:'Paid in the pay run'});
+  });
+  var order = {lost:0, earned:1, paid:2, expected:3};
+  return ev.filter(function(e){ return e.date>=fromDay && e.date<=TODAY; }).sort(function(a,b){ return b.date-a.date || order[a.kind]-order[b.kind]; });
+}
+function feedHTML(ev, showFr){
+  if(!ev.length) return '<p class="hint">No changes in this period.</p>';
+  return '<ul class="feed">'+ev.map(function(e){
+    return '<li><span class="muted num">'+fmtShort(e.date)+'</span><span>'+(showFr?'<b>'+esc(e.r.fr.name)+'</b> · ':'')+'<button type="button" class="linkbtn" data-eg="'+e.r.eg+'">'+esc(e.r.donor)+'</button> '+esc(e.text)+'</span><span class="amt '+e.cls+'">'+(e.kind==='lost'?'−':e.kind==='earned'?'+':'')+money0(e.amt)+' '+e.kind+'</span></li>';
+  }).join('')+'</ul>';
+}
+function viewCommissions(){
+  var month = state.cm.month;
+  var months=[]; recs.forEach(function(r){ var k=monthKey(r.signup); if(months.indexOf(k)<0) months.push(k); });
+  var rows = commRows(month);
+  var T = {n:0, Expected:[0,0], Earned:[0,0], Paid:[0,0], Lost:[0,0]};
+  rows.forEach(function(x){ T.n+=x.n; ['Expected','Earned','Paid','Lost'].forEach(function(s){ T[s][0]+=x[s][0]; T[s][1]+=x[s][1]; }); });
+  function cell(v,l){ return '<td class="num r" data-l="'+l+'">'+(v[0]?money0(v[1])+' <span class="small muted">('+v[0]+')</span>':'<span class="muted">–</span>')+'</td>'; }
+  var table = '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Fundraiser</th><th class="r">Sign-ups</th><th class="r">Expected</th><th class="r">Earned, unpaid</th><th class="r">Paid</th><th class="r">Lost</th><th>Qualify rate</th></tr></thead><tbody>'+
+    rows.map(function(x){ var done = x.Earned[0]+x.Paid[0]+x.Lost[0];
+      return '<tr class="click" tabindex="0" data-fr="'+x.fr.id+'"><td class="lead" data-l="Fundraiser"><span>'+esc(x.fr.name)+(x.fr.end?' <span class="small muted">(left '+fmtShort(x.fr.end)+')</span>':'')+'</span></td><td class="num r" data-l="Sign-ups">'+x.n+'</td>'+cell(x.Expected,'Expected')+cell(x.Earned,'Earned, unpaid')+cell(x.Paid,'Paid')+cell(x.Lost,'Lost')+'<td data-l="Qualify rate">'+barCell(x.Earned[0]+x.Paid[0], done, '')+'</td></tr>';
+    }).join('')+'</tbody><tfoot><tr><td>All fundraisers</td><td class="num r">'+T.n+'</td><td class="num r">'+money0(T.Expected[1])+'</td><td class="num r">'+money0(T.Earned[1])+'</td><td class="num r">'+money0(T.Paid[1])+'</td><td class="num r">'+money0(T.Lost[1])+'</td><td>'+barCell(T.Earned[0]+T.Paid[0], T.Earned[0]+T.Paid[0]+T.Lost[0], '')+'</td></tr></tfoot></table></div>';
+  return '<section class="intro"><h1>Commissions</h1><p class="lede">What each fundraiser is owed, what is still expected and when, and why an amount drops when a donor cancels or debits fail. Fundraisers would see their own row and history.</p></section>'+
+  '<div class="rule"><b>Example rule, illustrative only</b><ul><li>Commission is <b>expected</b> from sign-up, and <b>earned</b> at the 2nd successful debit, the same point the sign-up becomes invoiceable.</li><li>It is <b>paid</b> in the Thursday pay run after the sign-up is invoiced. Next pay run: '+fmtDay(NEXT_PAYRUN)+'.</li><li>If the donor cancels or debits stop before the 2nd successful debit, the expected amount is <b>lost</b> and the reason is shown.</li><li>Example rates: $10 under $20 a month, $20 for $20–$39, $30 for $40 and over.</li></ul></div>'+
+  '<div class="tiles">'+
+    '<div class="tile"><span class="k">Expected</span><span class="v">'+money0(T.Expected[1])+'</span><span class="s">'+plural(T.Expected[0],'sign-up')+' still debiting</span></div>'+
+    '<div class="tile accent"><span class="k">Earned, unpaid</span><span class="v">'+money0(T.Earned[1])+'</span><span class="s">Pays '+fmtShort(NEXT_PAYRUN)+' once invoiced</span></div>'+
+    '<div class="tile"><span class="k">Paid</span><span class="v">'+money0(T.Paid[1])+'</span><span class="s">'+plural(T.Paid[0],'sign-up')+'</span></div>'+
+    '<div class="tile"><span class="k">Lost</span><span class="v">'+money0(T.Lost[1])+'</span><span class="s">Cancelled or stopped before 2 debits</span></div>'+
+  '</div>'+
+  '<div class="panel"><div class="filters"><div class="field"><label for="cm-month">Signed up</label><select id="cm-month"><option value="all">Any month</option>'+months.map(function(k){ return '<option value="'+k+'"'+(month===String(k)?' selected':'')+'>'+monthLabel(k)+'</option>'; }).join('')+'</select></div><p class="hint" style="align-self:center">Click a fundraiser to see each sign-up and every change to their commission.</p></div></div>'+
+  table+
+  '<div class="panel"><div class="section-head"><h2>Changes in the last 7 days</h2><span class="hint">Why the numbers moved: debits clearing, cancellations, failures</span></div>'+payRunLine()+feedHTML(commEvents(null, TODAY-6).filter(function(e){ return e.kind==='earned'||e.kind==='lost'; }).slice(0,30), true)+'</div>';
+}
+function payRunLine(){
+  var paid = commEvents(null, TODAY-6).filter(function(e){ return e.kind==='paid'; });
+  if(!paid.length) return '';
+  var tot = paid.reduce(function(a,e){ return a+e.amt; },0);
+  return '<p class="notice info">'+fmtDay(paid[0].date)+' pay run: '+money0(tot)+' paid for '+plural(paid.length,'sign-up')+' invoiced on '+fmt(paid[0].date-6)+'.</p>';
+}
+function fundraiserHTML(id){
+  var f = FUND.filter(function(x){ return x.id===id; })[0];
+  var mine = recs.filter(function(r){ return r.fr.id===id; }).sort(function(a,b){ return b.signup-a.signup; });
+  var T = {Expected:[0,0], Earned:[0,0], Paid:[0,0], Lost:[0,0]};
+  mine.forEach(function(r){ var c=commission(r); T[c.state][0]++; T[c.state][1]+=c.amt; });
+  var rows = mine.map(function(r){ var c=commission(r);
+    return '<tr class="click" tabindex="0" data-eg="'+r.eg+'"><td class="lead" data-l="Donor"><span>'+esc(r.donor)+' <span class="mono small muted">'+r.eg+'</span></span></td><td class="num" data-l="Signed up">'+fmtShort(r.signup)+'</td><td class="num r" data-l="Monthly">'+money(r.amount)+'</td><td data-l="Debits">'+succCell(r)+'</td><td data-l="Commission"><b>'+c.state+'</b> '+money(c.amt)+'</td><td class="small" data-l="When / why" style="white-space:normal">'+esc(c.why)+'</td></tr>';
+  }).join('');
+  return '<div class="dhead"><div style="display:grid;gap:4px"><div class="eyebrow">Fundraiser · example data</div><h2 id="drawer-title">'+esc(f.name)+'</h2><span class="hint">What '+esc(f.name)+' would see. '+plural(mine.length,'sign-up')+' since July'+(f.end?'; finished '+fmt(f.end):'')+'.</span></div><button type="button" class="iconbtn" data-close aria-label="Close">✕</button></div>'+
+  '<div class="dbody">'+
+    '<div class="tiles">'+
+      '<div class="tile"><span class="k">Expected</span><span class="v">'+money0(T.Expected[1])+'</span><span class="s">'+T.Expected[0]+' debiting</span></div>'+
+      '<div class="tile accent"><span class="k">Earned, unpaid</span><span class="v">'+money0(T.Earned[1])+'</span><span class="s">Pays '+fmtShort(NEXT_PAYRUN)+'</span></div>'+
+      '<div class="tile"><span class="k">Paid</span><span class="v">'+money0(T.Paid[1])+'</span><span class="s">'+T.Paid[0]+' sign-ups</span></div>'+
+      '<div class="tile"><span class="k">Lost</span><span class="v">'+money0(T.Lost[1])+'</span><span class="s">'+T.Lost[0]+' sign-ups</span></div>'+
+    '</div>'+
+    '<div class="section"><h3>Changes in the last 30 days</h3>'+feedHTML(commEvents(id, TODAY-29).slice(0,25), false)+'</div>'+
+    '<div class="section"><h3>Sign-ups</h3><div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Donor</th><th>Signed up</th><th class="r">Monthly</th><th>Debits</th><th>Commission</th><th>When / why</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'+
+  '</div>';
+}
+
+/* ---------------- Data needed ---------------- */
+function viewData(){
+  var sample = recs.filter(function(r){ return r.client && r.fails.length && r.succ.length>=2; })[3] || recs[0];
+  var csv = 'evergiving_id,client_id,debit_date,amount,method,result,reason_code,reason,result_date\n'+sample.attempts.filter(function(a){return !a.pending;}).map(function(a){
+    return [sample.eg, sample.client, iso(a.date), sample.amount.toFixed(2), sample.method, a.ok?'SUCCESS':'FAILED', a.ok?'':a.reason.code, a.ok?'':'"'+a.reason.text+'"', iso(a.result)].join(',');
+  }).join('\n');
+  var F = [
+    ['Evergiving ID (pledge reference)','<span class="mono">'+sample.eg+'</span>','Matches each debit to the sign-up on the tablet'],
+    ['Client donor ID','<span class="mono">'+sample.client+'</span>','Reconciles each line with '+CLIENT+'’s records'],
+    ['Debit date','5 Nov 2026','Counts successful debits and shows when commission is expected'],
+    ['Amount','$30.00','Checks the right amount was taken'],
+    ['Payment method','CC or DD','Card results are instant; direct debit dishonours can arrive days later'],
+    ['Result','Successful / Failed','Invoiceable at the 2nd successful debit'],
+    ['Decline or dishonour reason, with code','51 Insufficient funds','Tells a retry apart from a stopped debit, and drives follow-up'],
+    ['Result date','10 Nov 2026','When a direct debit can safely be counted'],
+    ['Cancellation date and reason','12 Sep 2026, Financial hardship','Explains why a sign-up did not qualify and why commission dropped'],
+    ['Payment details updated (date)','20 Oct 2026','Shows debits restarting after an expired card or closed account']
+  ];
+  return '<section class="intro"><h1>What this needs from '+CLIENT+'</h1><p class="lede">Today we receive an audit report. Everything in this wireframe runs on one more thing: the history of every debit attempt for each champion sign-up, including the failed ones and the bank’s reason.</p></section>'+
+  '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Field</th><th>Example</th><th>What we use it for</th></tr></thead><tbody>'+
+    F.map(function(f){ return '<tr><td class="lead" data-l="Field"><b>'+f[0]+'</b></td><td data-l="Example">'+f[1]+'</td><td data-l="Used for" style="white-space:normal">'+f[2]+'</td></tr>'; }).join('')+
+  '</tbody></table></div>'+
+  '<div class="grid2">'+
+    '<div class="panel"><h2>How it could arrive</h2><ul style="margin:0;padding-left:20px;display:grid;gap:6px"><li>One row per debit attempt, successful or failed.</li><li>A weekly file (CSV) or an API, before our Friday invoice run.</li><li>Cancellations and payment-detail changes in the same file, or a second one.</li><li>Only the donor’s initial and masked surname are needed. No card or bank numbers.</li></ul></div>'+
+    '<div class="panel"><div class="section-head"><h2>Example rows</h2><button type="button" class="btn quiet" id="copy-sample">Copy example CSV</button></div><p class="hint">The debit history of made-up sign-up <button type="button" class="linkbtn mono" data-eg="'+sample.eg+'">'+sample.eg+'</button> in the shape we would ask for.</p><div class="tablewrap"><pre class="mono" style="margin:0;padding:12px;font-size:12px;line-height:1.6;white-space:pre">'+esc(csv)+'</pre></div></div>'+
+  '</div>'+
+  '<p class="hint">All figures, names and IDs in this wireframe are invented. Rates and fees are placeholders.</p>';
+}
+
+/* ---------------- Overlays ---------------- */
+var drawer = document.getElementById('drawer'), scrim = document.getElementById('scrim'), modal = document.getElementById('modal');
+var lastFocus = null;
+function openDrawerHTML(html){
+  lastFocus = document.activeElement;
+  drawer.innerHTML = html; drawer.hidden=false; scrim.hidden=false; document.body.style.overflow='hidden';
+  var b = drawer.querySelector('[data-close]'); if(b) b.focus();
+  var body = drawer.querySelector('.dbody'); if(body) body.scrollTop=0;
+}
+function closeDrawer(){ drawer.hidden=true; drawer.innerHTML=''; if(modal.hidden){ scrim.hidden=true; document.body.style.overflow=''; } if(lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus(); }
+function openModalHTML(html){
+  modal.innerHTML = '<div class="mbox">'+html+'</div>'; modal.hidden=false; scrim.hidden=false; document.body.style.overflow='hidden';
+  var b = modal.querySelector('[data-close]'); if(b) b.focus();
+}
+function closeModal(){ modal.hidden=true; modal.innerHTML=''; if(drawer.hidden){ scrim.hidden=true; document.body.style.overflow=''; } }
+function openRecord(eg){ var r=byEg[eg]; if(!r) return; closeModal(); openDrawerHTML(recordHTML(r)); }
+function openFundraiser(id){ closeModal(); openDrawerHTML(fundraiserHTML(id)); }
+
+/* ---------------- Routing and rendering ---------------- */
+function updateBadge(){ document.getElementById('inv-badge').textContent = readyList().length; }
+function render(){
+  document.querySelectorAll('#tabs a').forEach(function(a){ if(a.getAttribute('data-tab')===state.tab) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  if(state.tab==='signups'){ view.innerHTML = viewSignups(); bindSignups(); }
+  else if(state.tab==='invoicing'){ view.innerHTML = viewInvoicing(); bindInvoicing(); }
+  else if(state.tab==='reports'){ view.innerHTML = viewReports(); }
+  else if(state.tab==='commissions'){ view.innerHTML = viewCommissions(); document.getElementById('cm-month').addEventListener('change', function(e){ state.cm.month=e.target.value; render(); }); }
+  else { view.innerHTML = viewData(); var cs=document.getElementById('copy-sample'); if(cs) cs.addEventListener('click', function(){ copyText(view.querySelector('pre').textContent, 'the example CSV'); }); }
+}
+var suppress = null;
+function setHash(h, replace){
+  try{
+    if(location.hash.slice(1)===h) return;
+    suppress = h;
+    if(replace) location.replace('#'+h); else location.hash = h;
+  }catch(e){ suppress = null; }
+}
+function go(tab){
+  state.tab = tab; closeModal(); closeDrawer(); render(); window.scrollTo(0,0); setHash(tab);
+}
+function showRecord(eg){ openRecord(eg); setHash('rec-'+eg, true); }
+function showFundraiser(id){ openFundraiser(id); setHash('fr-'+id, true); }
+function route(){
+  var h = location.hash.slice(1), m;
+  if(TABS.indexOf(h)>=0){
+    closeDrawer(); closeModal();
+    if(state.tab!==h){ state.tab=h; render(); window.scrollTo(0,0); }
+    return;
+  }
+  if((m=h.match(/^rec-(\d+)$/))) { openRecord(m[1]); return; }
+  if((m=h.match(/^fr-(\d+)$/))) { openFundraiser(+m[1]); return; }
+}
+function closeAll(){
+  if(!modal.hidden){ closeModal(); return; }
+  if(!drawer.hidden){ closeDrawer(); setHash(state.tab, true); }
+}
+
+document.addEventListener('click', function(e){
+  var t = e.target;
+  var c = t.closest('[data-close]'); if(c){ e.preventDefault(); if(modal.contains(c)) closeModal(); else closeAll(); return; }
+  if(t===scrim){ closeAll(); return; }
+  var tab = t.closest('#tabs a, .banner a'); if(tab){ e.preventDefault(); go(tab.getAttribute('href').slice(1)); return; }
+  var hl = t.closest('a[href^="#"]'); if(hl && !hl.closest('#tabs')){ var dest=hl.getAttribute('href').slice(1); if(TABS.indexOf(dest)>=0){ e.preventDefault(); closeModal(); go(dest); return; } }
+  var inv = t.closest('[data-inv]'); if(inv){ e.preventDefault(); openInvoice(inv.getAttribute('data-inv')); return; }
+  var fr = t.closest('[data-fr]'); if(fr){ e.preventDefault(); showFundraiser(+fr.getAttribute('data-fr')); return; }
+  if(t.closest('input,select,label')) return;
+  var eg = t.closest('[data-eg]'); if(eg){ e.preventDefault(); showRecord(eg.getAttribute('data-eg')); return; }
+  var st = t.closest('[data-status]'); if(st){ state.su.status = st.getAttribute('data-status'); state.su.page=0; renderSignupResults(); return; }
+  var so = t.closest('[data-sort]'); if(so){ var k=so.getAttribute('data-sort'); if(state.su.sort===k) state.su.dir*=-1; else { state.su.sort=k; state.su.dir = (k==='signup'||k==='succ'||k==='amount'||k==='inv'||k==='invoiceable')?-1:1; } state.su.page=0; renderSignupResults(); return; }
+  var pg = t.closest('[data-page]'); if(pg && !pg.disabled){ state.su.page=+pg.getAttribute('data-page'); renderSignupResults(); var res=document.getElementById('su-results'); if(res) res.scrollIntoView({block:'start'}); return; }
+  if(t.closest('#review')){ openReview(); return; }
+});
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape'){ closeAll(); return; }
+  if((e.key==='Enter'||e.key===' ') && e.target.matches && e.target.matches('tr.click')){ e.preventDefault(); e.target.click(); }
+});
+window.addEventListener('hashchange', function(){ var h=location.hash.slice(1); if(suppress!==null && h===suppress){ suppress=null; return; } suppress=null; route(); });
+
+function fitBanner(){ var b=document.getElementById('banner'); document.documentElement.style.setProperty('--bh', b.offsetHeight+'px'); }
+window.addEventListener('resize', fitBanner);
+if(window.ResizeObserver) new ResizeObserver(fitBanner).observe(document.getElementById('banner'));
+fitBanner();
+updateBadge();
+var h0 = location.hash.slice(1);
+if(TABS.indexOf(h0)>=0) state.tab=h0;
+if(/^fr-/.test(h0)) state.tab='commissions';
+render();
+route();
+})();
+</script>
+</body>
+</html>
