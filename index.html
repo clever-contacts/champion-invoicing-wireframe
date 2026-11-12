@@ -166,6 +166,24 @@ tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   tr.click:hover td{background:transparent}
 }
 @media (min-width:761px){ .rtable td.lead .lead-pill{display:none} .lead-label{display:none} }
+@media (max-width:1240px){
+  .rtable-wrap:has(> .rtable.wide){border:0;background:transparent;overflow:visible}
+  .rtable.wide thead{display:none}
+  .rtable.wide,.rtable.wide tbody,.rtable.wide tfoot{display:grid;gap:10px}
+  .rtable.wide tbody + tfoot{margin-top:10px}
+  .rtable.wide tr{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px 14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  .rtable.wide tfoot tr{background:var(--surface-2)}
+  .rtable.wide td,.rtable.wide td.r,.rtable.wide tfoot td{display:grid;gap:1px;padding:0;border:0;white-space:normal;min-width:0;text-align:left;align-content:start;background:transparent;font-weight:inherit}
+  .rtable.wide td::before{content:attr(data-l);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .rtable.wide td.lead{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600;font-size:16px}
+  .rtable.wide td.lead::before,.rtable.wide td.check::before{display:none}
+  .rtable.wide td.check{grid-column:1 / -1}
+  .rtable.wide td.lead .lead-pill{display:inline-flex}
+  .rtable.wide .lead-label{display:inline}
+  .rtable.wide td.hide-m{display:none}
+  .rtable.wide tr.click:hover td{background:transparent}
+  .rtable.wide tr.click:hover{border-color:var(--accent)}
+}
 @media (max-width:760px){ .rtable td.hide-m{display:none} }
 
 /* Tiles */
@@ -239,7 +257,7 @@ input[type="checkbox"]{width:18px;height:18px;accent-color:var(--accent);cursor:
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,580px),1fr));gap:20px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
 .toast[hidden]{display:none}
 textarea.csv{width:100%;min-height:160px;font-family:var(--font-mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:10px}
@@ -647,7 +665,7 @@ function renderSignupResults(){
   }).join('')+'</tr></thead>';
   var body = slice.map(rowHTML).join('');
   var html = '<div class="pager"><span class="count">'+(list.length? 'Showing '+(from+1)+'–'+(from+slice.length)+' of '+list.length+' sign-ups' : 'No sign-ups match. Try fewer words or another field.')+'</span>'+pagerBtns(S.page,pages)+'</div>';
-  if(list.length) html += '<div class="tablewrap rtable-wrap"><table class="rtable">'+head+'<tbody>'+body+'</tbody></table></div><div class="pager"><span class="count"></span>'+pagerBtns(S.page,pages)+'</div>';
+  if(list.length) html += '<div class="tablewrap rtable-wrap"><table class="rtable wide">'+head+'<tbody>'+body+'</tbody></table></div><div class="pager"><span class="count"></span>'+pagerBtns(S.page,pages)+'</div>';
   document.getElementById('su-results').innerHTML = html;
 }
 function pagerBtns(p,pages){
@@ -785,7 +803,7 @@ function viewInvoicing(){
     }).join('');
     var allOn = ready.every(function(r){ return state.sel[r.eg]; });
     html += '<div class="section"><div class="section-head"><h2>Ready to invoice</h2><span class="hint">Every row has 2 successful debits. Untick any you want to hold back.</span></div>'+
-      '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th><input type="checkbox" id="pickall"'+(allOn?' checked':'')+' aria-label="Select all"></th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Fundraiser</th><th>Signed up</th><th>Method</th><th class="r">Amount</th><th>2nd debit cleared</th><th class="r">Fee (7 × monthly)</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="tablewrap rtable-wrap"><table class="rtable wide"><thead><tr><th><input type="checkbox" id="pickall"'+(allOn?' checked':'')+' aria-label="Select all"></th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Fundraiser</th><th>Signed up</th><th>Method</th><th class="r">Amount</th><th>2nd debit cleared</th><th class="r">Fee (7 × monthly)</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
       '<div class="actionbar" id="actionbar"></div></div>';
   } else {
     html += '<div class="panel"><h2>Nothing to invoice this week</h2><p class="hint">Every sign-up with 2 successful debits is on an invoice. The next debit run is '+fmtDay(NEXT_RUN)+': '+plural(oneDebit,'sign-up')+' with 1 successful debit can qualify then.'+(mine.length?' You created '+plural(mine.length,'invoice')+' in this browser.':'')+'</p>'+(mine.length?'<div><button type="button" class="btn quiet" id="reset">Reset the demo</button></div>':'')+'</div>';
@@ -938,11 +956,11 @@ function periodSection(){
   var rows = keys.map(function(k){ var m=M[k]; Object.keys(T).forEach(function(f){ T[f]+=m[f]; });
     return '<tr><td class="lead" data-l="'+colName+'"><span>'+label(k)+'</span></td><td class="num r" data-l="Sign-ups"><b>'+m.n+'</b></td><td class="num r" data-l="CC / DD">'+m.cc+' / '+m.dd+'</td><td class="num r" data-l="Avg monthly">'+money(m.amt/m.n)+'</td><td class="num r" data-l="Debiting">'+m.Debiting+'</td><td class="num r" data-l="Invoiceable">'+m.Invoiceable+'</td><td class="num r" data-l="Invoiced">'+m.Invoiced+'</td><td class="num r" data-l="Failed">'+m.Failed+'</td><td class="num r" data-l="Cancelled">'+m.Cancelled+'</td><td data-l="Qualified">'+barCell(m.Invoiceable+m.Invoiced, m.n, '')+'</td></tr>';
   }).join('');
-  var foot = '<tfoot><tr><td>Total</td><td class="num r">'+T.n+'</td><td class="num r">'+T.cc+' / '+T.dd+'</td><td class="num r">'+money(T.amt/T.n)+'</td><td class="num r">'+T.Debiting+'</td><td class="num r">'+T.Invoiceable+'</td><td class="num r">'+T.Invoiced+'</td><td class="num r">'+T.Failed+'</td><td class="num r">'+T.Cancelled+'</td><td>'+barCell(T.Invoiceable+T.Invoiced, T.n, '')+'</td></tr></tfoot>';
+  var foot = '<tfoot><tr><td class="lead" data-l="Total">Total</td><td class="num r" data-l="Sign-ups">'+T.n+'</td><td class="num r" data-l="CC / DD">'+T.cc+' / '+T.dd+'</td><td class="num r" data-l="Avg monthly">'+money(T.amt/T.n)+'</td><td class="num r" data-l="Debiting">'+T.Debiting+'</td><td class="num r" data-l="Invoiceable">'+T.Invoiceable+'</td><td class="num r" data-l="Invoiced">'+T.Invoiced+'</td><td class="num r" data-l="Failed">'+T.Failed+'</td><td class="num r" data-l="Cancelled">'+T.Cancelled+'</td><td data-l="Qualified">'+barCell(T.Invoiceable+T.Invoiced, T.n, '')+'</td></tr></tfoot>';
   var active = recs.filter(function(r){ return !r.cancel && !r.stopped; });
   var monthly = active.reduce(function(a,r){ return a+r.amount; },0);
   return '<div class="section-head"><div class="headtools"><h2>Sign-ups by '+(by==='week'?'week':'month')+'</h2><span class="seg" role="group" aria-label="Group sign-ups by"><button type="button" data-by="month" aria-pressed="'+(by==='month')+'">By month</button><button type="button" data-by="week" aria-pressed="'+(by==='week')+'">By week</button></span></div><span class="hint">Status today of each '+(by==='week'?'week':'month')+'’s sign-ups. Recent ones are still debiting.</span></div>'+
-    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>'+colName+'</th><th class="r">Sign-ups</th><th class="r">CC / DD</th><th class="r">Avg monthly</th><th class="r">Debiting</th><th class="r">Invoiceable</th><th class="r">Invoiced</th><th class="r">Failed</th><th class="r">Cancelled</th><th>Qualified (2 debits)</th></tr></thead><tbody>'+rows+'</tbody>'+foot+'</table></div>'+
+    '<div class="tablewrap rtable-wrap"><table class="rtable wide"><thead><tr><th>'+colName+'</th><th class="r">Sign-ups</th><th class="r">CC / DD</th><th class="r">Avg monthly</th><th class="r">Debiting</th><th class="r">Invoiceable</th><th class="r">Invoiced</th><th class="r">Failed</th><th class="r">Cancelled</th><th>Qualified (2 debits)</th></tr></thead><tbody>'+rows+'</tbody>'+foot+'</table></div>'+
     '<p class="hint">Active monthly giving (not cancelled or stopped): <b>'+money(monthly)+'</b> a month across '+active.length+' donors.</p>';
 }
 function barCell(a, b, cls, max){
