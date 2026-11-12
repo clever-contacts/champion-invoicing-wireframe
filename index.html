@@ -68,7 +68,7 @@ button,input,select{font:inherit;color:inherit}
 
 /* App bar */
 .top{background:var(--surface);border-bottom:1px solid var(--line)}
-.top-inner{max-width:1280px;margin:0 auto;padding:14px 24px 0;display:grid;gap:8px}
+.top-inner{max-width:1440px;margin:0 auto;padding:14px 24px 0;display:grid;gap:8px}
 .brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
 .brand .title{font-family:var(--font-display);font-weight:700;font-size:22px}
 .brand .sub{color:var(--muted);font-size:13.5px}
@@ -78,12 +78,12 @@ button,input,select{font:inherit;color:inherit}
 .tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
 .badge{display:inline-grid;place-items:center;min-width:22px;height:20px;padding:0 6px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
 
-main{max-width:1280px;margin:0 auto;padding:24px;display:grid;gap:20px}
+main{max-width:1440px;margin:0 auto;padding:24px;display:grid;gap:20px}
 .intro{display:grid;gap:6px}
 .lede{color:var(--muted);max-width:72ch}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:14px;min-width:0}
 .panel > h2{font-size:18px}
-.section{display:grid;gap:12px;min-width:0}
+.section{display:grid;gap:12px;min-width:0;align-content:start}
 .section-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
 .hint{color:var(--muted);font-size:13.5px}
 
@@ -181,6 +181,13 @@ tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .bar > span{display:block;height:100%;border-radius:4px;background:var(--s1)}
 .bar.s2 > span{background:var(--s2)}
 .barcell{display:inline-flex;align-items:center;gap:8px}
+.bar.sm{width:72px}
+.rtable.wrap td{white-space:normal}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted)}
+.seg button + button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.headtools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
 
 /* Drawer and modal */
 .scrim{position:fixed;left:0;right:0;bottom:0;top:var(--bh);background:rgba(8,12,20,.45);z-index:40}
@@ -201,7 +208,7 @@ tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .timeline li:first-child{border-top:0}
 .timeline .when{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .modal{position:fixed;left:0;right:0;bottom:0;top:var(--bh);z-index:50;display:grid;place-items:center;padding:16px}
-.mbox{position:relative;width:min(900px,100%);max-height:100%;overflow-y:auto;background:var(--surface);border-radius:12px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.3);display:grid;gap:16px;padding:20px}
+.mbox{position:relative;width:min(1200px,100%);max-height:100%;overflow-y:auto;background:var(--surface);border-radius:12px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.3);display:grid;gap:16px;padding:20px}
 .mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .mfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
 .notice{padding:10px 14px;border-radius:8px;font-size:14px}
@@ -212,7 +219,7 @@ tr.click:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .invgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 18px}
 .invgrid div{display:grid;gap:1px}
 .invgrid .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.totals{display:grid;justify-content:end;gap:4px;font-variant-numeric:tabular-nums}
+.totals{display:grid;justify-content:end;gap:4px;font-variant-numeric:tabular-nums;padding:10px 14px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);justify-self:end}
 .totals div{display:grid;grid-template-columns:auto 130px;text-align:right;gap:16px}
 .totals .grand{font-weight:700;font-size:17px;border-top:1px solid var(--line);padding-top:6px}
 
@@ -553,7 +560,8 @@ var state = {
   tab:'signups',
   su:{q:'', field:'all', method:'all', month:'all', status:'all', sort:'signup', dir:-1, page:0},
   sel:null,
-  cm:{month:'all'}
+  cm:{month:'all'},
+  rep:{by:'month'}
 };
 var PAGE = 50;
 var view = document.getElementById('view');
@@ -827,9 +835,9 @@ function invoiceDoc(inv, preview){
       '<div><span class="k">Fee</span>7 × monthly amount per sign-up, ex GST</div>'+
       (inv?'<div><span class="k">Status</span>'+x.status+'</div>':'')+
     '</div>'+
+    '<div class="totals"><div><span>Fees, '+plural(lines.length,'sign-up')+' (7 × '+money(monthlyTotal)+' monthly)</span><span>'+money(sub)+'</span></div><div><span>GST 10%</span><span>'+money(gst)+'</span></div><div class="grand"><span>Total inc GST</span><span>'+money(total)+'</span></div></div>'+
     '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>#</th><th>Evergiving ID</th><th>Client ID</th><th>Donor</th><th>Signed up</th><th>2nd debit cleared</th><th class="r">Monthly</th><th class="r">Fee (7 × monthly)</th></tr></thead><tbody>'+rows+'</tbody>'+
       '<tfoot><tr><td colspan="6">Total, '+plural(lines.length,'sign-up')+'</td><td class="num r">'+money(monthlyTotal)+'</td><td class="num r">'+money(sub)+'</td></tr></tfoot></table></div>'+
-    '<div class="totals"><div><span>Fees, '+plural(lines.length,'sign-up')+' (7 × '+money(monthlyTotal)+' monthly)</span><span>'+money(sub)+'</span></div><div><span>GST 10%</span><span>'+money(gst)+'</span></div><div class="grand"><span>Total inc GST</span><span>'+money(total)+'</span></div></div>'+
     '<p class="small muted">Example only, not a real invoice. Made-up sign-ups.</p>'+
   '</div>';
 }
@@ -891,17 +899,7 @@ function viewReports(){
     '<div class="tile"><span class="k">Failed</span><span class="v">'+counts.Failed+'</span><span class="s">Debits stopped</span></div>'+
     '<div class="tile"><span class="k">Cancelled</span><span class="v">'+counts.Cancelled+'</span><span class="s">Before 2 debits</span></div>'+
   '</div>';
-  // by month
-  var mk=[], M={};
-  recs.forEach(function(r){ var k=monthKey(r.signup); if(!M[k]){ M[k]={n:0,cc:0,dd:0,amt:0,Debiting:0,Invoiceable:0,Invoiced:0,Failed:0,Cancelled:0}; mk.push(k); } var m=M[k]; m.n++; m[r.method==='CC'?'cc':'dd']++; m.amt+=r.amount; m[status(r)]++; });
-  var T={n:0,cc:0,dd:0,amt:0,Debiting:0,Invoiceable:0,Invoiced:0,Failed:0,Cancelled:0};
-  var mrows = mk.map(function(k){ var m=M[k]; Object.keys(T).forEach(function(f){ T[f]+=m[f]; });
-    return '<tr><td class="lead" data-l="Month">'+monthLabel(k)+'</td><td class="num r" data-l="Sign-ups"><b>'+m.n+'</b></td><td class="num r" data-l="CC / DD">'+m.cc+' / '+m.dd+'</td><td class="num r" data-l="Avg monthly">'+money(m.amt/m.n)+'</td><td class="num r" data-l="Debiting">'+m.Debiting+'</td><td class="num r" data-l="Invoiceable">'+m.Invoiceable+'</td><td class="num r" data-l="Invoiced">'+m.Invoiced+'</td><td class="num r" data-l="Failed">'+m.Failed+'</td><td class="num r" data-l="Cancelled">'+m.Cancelled+'</td><td data-l="Qualified">'+barCell(m.Invoiceable+m.Invoiced, m.n, '')+'</td></tr>';
-  }).join('');
-  var mfoot = '<tfoot><tr><td>Total</td><td class="num r">'+T.n+'</td><td class="num r">'+T.cc+' / '+T.dd+'</td><td class="num r">'+money(T.amt/T.n)+'</td><td class="num r">'+T.Debiting+'</td><td class="num r">'+T.Invoiceable+'</td><td class="num r">'+T.Invoiced+'</td><td class="num r">'+T.Failed+'</td><td class="num r">'+T.Cancelled+'</td><td>'+barCell(T.Invoiceable+T.Invoiced, T.n, '')+'</td></tr></tfoot>';
-  var byMonth = '<div class="section"><div class="section-head"><h2>Sign-ups by month</h2><span class="hint">Status today of each month’s sign-ups. Recent months are still debiting.</span></div>'+
-    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Month</th><th class="r">Sign-ups</th><th class="r">CC / DD</th><th class="r">Avg monthly</th><th class="r">Debiting</th><th class="r">Invoiceable</th><th class="r">Invoiced</th><th class="r">Failed</th><th class="r">Cancelled</th><th>Qualified (2 debits)</th></tr></thead><tbody>'+mrows+'</tbody>'+mfoot+'</table></div>'+
-    '<p class="hint">Active monthly giving (not cancelled or stopped): <b>'+money(monthly)+'</b> a month across '+active.length+' donors.</p></div>';
+  var byMonth = '<div class="section" id="period-section">'+periodSection()+'</div>';
   // debit runs
   var runs={}, rk=[];
   recs.forEach(function(r){ r.attempts.forEach(function(a){
@@ -920,13 +918,32 @@ function viewReports(){
     recs.forEach(function(r){ if(r.method!==method) return; r.fails.forEach(function(a){ var k=a.reason.code+'|'+a.reason.text; if(!cnt[k]){ cnt[k]={r:a.reason,n:0}; keys.push(k); } cnt[k].n++; tot++; }); });
     keys.sort(function(a,b){ return cnt[b].n-cnt[a].n; });
     var max = keys.length ? cnt[keys[0]].n : 1;
-    return '<div class="section"><div class="section-head"><h3>'+(method==='CC'?'Card (CC)':'Direct debit (DD)')+'</h3><span class="hint">'+plural(tot,'failed debit')+'</span></div><div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Bank reason (example codes)</th><th class="r">Failed</th><th>Share</th><th>What happens</th></tr></thead><tbody>'+
-      keys.map(function(k){ var x=cnt[k]; return '<tr><td class="lead" data-l="Reason"><span><span class="mono small muted">'+x.r.code+'</span> '+esc(x.r.text)+'</span></td><td class="num r" data-l="Failed">'+x.n+'</td><td data-l="Share">'+barCell(x.n, tot, method==='DD'?'s2':'', max)+'</td><td data-l="What happens" class="small">'+(x.r.terminal?'Debits stop until new details':'Tried again next monthly run')+'</td></tr>'; }).join('')+
+    return '<div class="section"><div class="section-head"><h3>'+(method==='CC'?'Card (CC)':'Direct debit (DD)')+'</h3><span class="hint">'+plural(tot,'failed debit')+'</span></div><div class="tablewrap rtable-wrap"><table class="rtable wrap"><thead><tr><th>Bank reason (example codes)</th><th class="r">Failed</th><th>Share</th><th>What happens</th></tr></thead><tbody>'+
+      keys.map(function(k){ var x=cnt[k]; return '<tr><td class="lead" data-l="Reason"><span><span class="mono small muted">'+x.r.code+'</span> '+esc(x.r.text)+'</span></td><td class="num r" data-l="Failed">'+x.n+'</td><td data-l="Share">'+barCell(x.n, tot, method==='DD'?'s2 sm':'sm', max)+'</td><td data-l="What happens" class="small">'+(x.r.terminal?'Stops until new details':'Retried next monthly run')+'</td></tr>'; }).join('')+
       '</tbody></table></div></div>';
   }
   var declines = '<div class="section"><div class="section-head"><h2>Why debits failed</h2><span class="hint">Only possible with per-debit history and decline reasons.</span></div><div class="grid2">'+reasons('CC')+reasons('DD')+'</div></div>';
   var invHist = '<div class="section"><div class="section-head"><h2>Invoice history</h2><span class="hint">'+plural(invoices.length,'invoice')+' · '+money(invTotal)+' inc GST. Click one to see its lines.</span></div>'+invoiceTable(invoices.slice().reverse())+'</div>';
   return '<section class="intro"><h1>Reports</h1><p class="lede">Where every sign-up stands today, how each debit run went and why debits failed. Every number here comes from the per-debit history.</p></section>'+tiles+byMonth+invHist+declines+runTable;
+}
+function weekStart(n){ return n - ((dow(n)+6)%7); }
+function periodSection(){
+  var by = state.rep.by, keys=[], M={};
+  var blank = function(){ return {n:0,cc:0,dd:0,amt:0,Debiting:0,Invoiceable:0,Invoiced:0,Failed:0,Cancelled:0}; };
+  recs.forEach(function(r){ var k = by==='week' ? weekStart(r.signup) : monthKey(r.signup); if(!M[k]){ M[k]=blank(); keys.push(k); } var m=M[k]; m.n++; m[r.method==='CC'?'cc':'dd']++; m.amt+=r.amount; m[status(r)]++; });
+  keys.sort(function(a,b){ return a-b; });
+  var T = blank();
+  var label = function(k){ return by==='week' ? fmtShort(k)+' – '+fmtShort(k+6)+(k+6>TODAY?' <span class="small muted">(to date)</span>':'') : monthLabel(k); };
+  var colName = by==='week' ? 'Week (Mon–Sun)' : 'Month';
+  var rows = keys.map(function(k){ var m=M[k]; Object.keys(T).forEach(function(f){ T[f]+=m[f]; });
+    return '<tr><td class="lead" data-l="'+colName+'"><span>'+label(k)+'</span></td><td class="num r" data-l="Sign-ups"><b>'+m.n+'</b></td><td class="num r" data-l="CC / DD">'+m.cc+' / '+m.dd+'</td><td class="num r" data-l="Avg monthly">'+money(m.amt/m.n)+'</td><td class="num r" data-l="Debiting">'+m.Debiting+'</td><td class="num r" data-l="Invoiceable">'+m.Invoiceable+'</td><td class="num r" data-l="Invoiced">'+m.Invoiced+'</td><td class="num r" data-l="Failed">'+m.Failed+'</td><td class="num r" data-l="Cancelled">'+m.Cancelled+'</td><td data-l="Qualified">'+barCell(m.Invoiceable+m.Invoiced, m.n, '')+'</td></tr>';
+  }).join('');
+  var foot = '<tfoot><tr><td>Total</td><td class="num r">'+T.n+'</td><td class="num r">'+T.cc+' / '+T.dd+'</td><td class="num r">'+money(T.amt/T.n)+'</td><td class="num r">'+T.Debiting+'</td><td class="num r">'+T.Invoiceable+'</td><td class="num r">'+T.Invoiced+'</td><td class="num r">'+T.Failed+'</td><td class="num r">'+T.Cancelled+'</td><td>'+barCell(T.Invoiceable+T.Invoiced, T.n, '')+'</td></tr></tfoot>';
+  var active = recs.filter(function(r){ return !r.cancel && !r.stopped; });
+  var monthly = active.reduce(function(a,r){ return a+r.amount; },0);
+  return '<div class="section-head"><div class="headtools"><h2>Sign-ups by '+(by==='week'?'week':'month')+'</h2><span class="seg" role="group" aria-label="Group sign-ups by"><button type="button" data-by="month" aria-pressed="'+(by==='month')+'">By month</button><button type="button" data-by="week" aria-pressed="'+(by==='week')+'">By week</button></span></div><span class="hint">Status today of each '+(by==='week'?'week':'month')+'’s sign-ups. Recent ones are still debiting.</span></div>'+
+    '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>'+colName+'</th><th class="r">Sign-ups</th><th class="r">CC / DD</th><th class="r">Avg monthly</th><th class="r">Debiting</th><th class="r">Invoiceable</th><th class="r">Invoiced</th><th class="r">Failed</th><th class="r">Cancelled</th><th>Qualified (2 debits)</th></tr></thead><tbody>'+rows+'</tbody>'+foot+'</table></div>'+
+    '<p class="hint">Active monthly giving (not cancelled or stopped): <b>'+money(monthly)+'</b> a month across '+active.length+' donors.</p>';
 }
 function barCell(a, b, cls, max){
   var w = max ? Math.round(a*100/max) : (b ? Math.round(a*100/b) : 0);
@@ -1009,7 +1026,7 @@ function fundraiserHTML(id){
       '<div class="tile"><span class="k">Lost</span><span class="v">'+money0(T.Lost[1])+'</span><span class="s">'+T.Lost[0]+' sign-ups</span></div>'+
     '</div>'+
     '<div class="section"><h3>Changes in the last 30 days</h3>'+feedHTML(commEvents(id, TODAY-29).slice(0,25), false)+'</div>'+
-    '<div class="section"><h3>Sign-ups</h3><div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Donor</th><th>Signed up</th><th class="r">Monthly</th><th>Debits</th><th>Commission</th><th>When / why</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'+
+    '<div class="section"><h3>Sign-ups</h3><div class="tablewrap rtable-wrap"><table class="rtable wrap"><thead><tr><th>Donor</th><th>Signed up</th><th class="r">Monthly</th><th>Debits</th><th>Commission</th><th>When / why</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'+
   '</div>';
 }
 
@@ -1035,7 +1052,7 @@ function viewData(){
   '<div class="tablewrap rtable-wrap"><table class="rtable"><thead><tr><th>Field</th><th>Example</th><th>What we use it for</th></tr></thead><tbody>'+
     F.map(function(f){ return '<tr><td class="lead" data-l="Field"><b>'+f[0]+'</b></td><td data-l="Example">'+f[1]+'</td><td data-l="Used for" style="white-space:normal">'+f[2]+'</td></tr>'; }).join('')+
   '</tbody></table></div>'+
-  '<div class="grid2">'+
+  '<div class="section">'+
     '<div class="panel"><h2>How it could arrive</h2><ul style="margin:0;padding-left:20px;display:grid;gap:6px"><li>One row per debit attempt, successful or failed.</li><li>A weekly file (CSV) or an API, before our Friday invoice run.</li><li>Cancellations and payment-detail changes in the same file, or a second one.</li><li>Only the donor’s initial and masked surname are needed. No card or bank numbers.</li></ul></div>'+
     '<div class="panel"><div class="section-head"><h2>Example rows</h2><button type="button" class="btn quiet" id="copy-sample">Copy example CSV</button></div><p class="hint">The debit history of made-up sign-up <button type="button" class="linkbtn mono" data-eg="'+sample.eg+'">'+sample.eg+'</button> in the shape we would ask for.</p><div class="tablewrap"><pre class="mono" style="margin:0;padding:12px;font-size:12px;line-height:1.6;white-space:pre">'+esc(csv)+'</pre></div></div>'+
   '</div>'+
@@ -1111,6 +1128,7 @@ document.addEventListener('click', function(e){
   var st = t.closest('[data-status]'); if(st){ state.su.status = st.getAttribute('data-status'); state.su.page=0; renderSignupResults(); return; }
   var so = t.closest('[data-sort]'); if(so){ var k=so.getAttribute('data-sort'); if(state.su.sort===k) state.su.dir*=-1; else { state.su.sort=k; state.su.dir = (k==='signup'||k==='succ'||k==='amount'||k==='inv'||k==='invoiceable')?-1:1; } state.su.page=0; renderSignupResults(); return; }
   var pg = t.closest('[data-page]'); if(pg && !pg.disabled){ state.su.page=+pg.getAttribute('data-page'); renderSignupResults(); var res=document.getElementById('su-results'); if(res) res.scrollIntoView({block:'start'}); return; }
+  var byb = t.closest('[data-by]'); if(byb){ state.rep.by = byb.getAttribute('data-by'); var ps=document.getElementById('period-section'); if(ps) ps.innerHTML = periodSection(); return; }
   if(t.closest('#review')){ openReview(); return; }
 });
 document.addEventListener('keydown', function(e){
